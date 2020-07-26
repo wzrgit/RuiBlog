@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from blog.views import index as view_index
+from blog.views import test as view_test
 
 
 urlpatterns = [
     path('index/', view_index.index),
     path('admin/', admin.site.urls),
+    path('test/', view_test.test_base_template)
 ]
