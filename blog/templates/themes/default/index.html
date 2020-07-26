@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
+    <script>{% static 'libs/bootstrap/js/bootstrap.min.js' %}</script>
+    <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <title>{{ blogname }}</title>
 </head>
 <body>
-<h1>{{ blogname }}</h1><br>
-<h2>{{ blogdesc }}</h2>
+<h1>{{ blog_name }}</h1><br>
+<h2>{{ blog_desc }}</h2>
+<hr>
+<button type="button" class="btn btn-info">Use Django3</button>
+<button type="button" class="btn btn-success">Bootstrap4 imported</button>
 
 </body>
 </html>

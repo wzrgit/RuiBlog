@@ -8,7 +8,7 @@ def index(request):
     theme = options.get(name='theme').value
     assert(len(theme) > 0)
 
-    content = {'blogname': options.get(name='blogname').value,
-               'blogdesc': options.get(name='blogdesc').value}
+    content = {'blog_name': options.get(name='blog_name').value,
+               'blog_desc': options.get(name='blog_desc').value}
 
     return render(request, 'themes/' + theme + '/index.html', content)
