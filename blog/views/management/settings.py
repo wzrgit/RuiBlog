@@ -14,7 +14,7 @@ def settings(request):
         try:
             Options.objects.filter(name='blog_name').update(value=request.POST['blog_name'])
             Options.objects.filter(name='blog_desc').update(value=request.POST['blog_desc'])
-        except(KeyError,err):
+        except(KeyError):
             pass
         else:
             pass

@@ -1,0 +1,53 @@
+{% extends 'management/manage_base.html' %}
+{% block title %}Posts{% endblock %}
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <span class="fa-pd"><a href="#">All</a></span>|
+            <span class="fa-pd"><a href="#">Published</a></span>|
+            <span class="fa-pd"><a href="#">Protected</a></span>|
+            <span class="fa-pd"><a href="#">Private</a></span>|
+            <span class="fa-pd"><a href="#">Draft</a></span>
+        </div>
+        <div class="row w-100" id="post_list">
+            <ul class="list-group w-100">
+                <li class="list-group-item text-nowrap align-left">
+                    <div class="row">
+                        <input type="checkbox">
+                        <div class="col-4 overflow-auto">
+                            <a href="#">the title of my post, test for a long text, too see when hide or auto show</a>
+                        </div>
+                        <div class="col-2">
+                            <a href="#">The_category</a>
+                        </div>
+                        <div class="col-3">2020-07-20</div>
+                    </div>
+                </li>
+                <li class="list-group-item text-nowrap align-left">
+                    <div class="row">
+                        <input type="checkbox">
+                        <div class="col-4">
+                            <a href="#">the title of my post</a>
+                        </div>
+                        <div class="col-2">
+                            <a href="#">The_category</a>
+                        </div>
+                        <div class="col-2">2020-07-20</div>
+                    </div>
+                </li>
+                <li class="list-group-item text-nowrap  align-left">
+                    <div class="row">
+                        <input type="checkbox">
+                        <div class="col-4">
+                            <a href="#">the title of my post</a>
+                        </div>
+                        <div class="col-2">
+                            <a href="#">The_category</a>
+                        </div>
+                        <div class="col-3">2020-07-20</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
