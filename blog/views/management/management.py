@@ -8,3 +8,5 @@ def dashboard(request):
     # TODO check auth
     content = {'common': common.GetCommons()}
     return render(request, 'management/dashboard.html', content)
+
+

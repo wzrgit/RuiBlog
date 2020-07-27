@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from blog.views import index as view_index
 from blog.views import test as view_test
-from blog.views import management as view_manage
+from blog.views.management import management, settings
 
 
 urlpatterns = [
     path('index/', view_index.index),
     path('admin/', admin.site.urls),
     path('test/', view_test.test_base_template),
-    path('management/dashboard/', view_manage.dashboard),
+    path('management/dashboard/', management.dashboard),
+    path('management/settings/', settings.settings),
 ]
