@@ -1,9 +1,16 @@
 {% extends "management/manage_base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block main_content %}
-    com
     <div class="container">
-    container
+        <div class="card">
+            <div class="card-header">概览</div>
+            <div class="card-body">
+                <div id="counts">
+                    <span class="fa-pd fas fa-align-left"></span>{{ counts.posts }}篇文章
+                    <span class="fas fa-images fa-pd "></span>{{ counts.albums }}个相册
+                </div>
+            </div>
+        </div>
 
     </div>
 {% endblock %}

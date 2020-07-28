@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from blog.views import index as view_index
 from blog.views import test as view_test
-from blog.views.management import management, settings, posts
+from blog.views.management import management, settings, posts, albums
 
 urlpatterns = [
     path('index/', view_index.index),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('management/dashboard/', management.dashboard),
     path('management/settings/', settings.settings),
     path('management/posts/', posts.posts),
+    path('management/albums/', albums.albums),
 ]
