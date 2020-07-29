@@ -2,6 +2,13 @@ from django.db import models
 # from __future__ import unicode_literals
 
 
+class VisitStatus:
+    Draft = 0
+    Public = 1
+    Protected = 2
+    Private = 3
+
+
 class Options(models.Model):
     name = models.CharField(max_length=255, unique=True)
     value = models.CharField(max_length=512)
@@ -9,10 +16,10 @@ class Options(models.Model):
 
 class Posts(models.Model):
     VISIT_STATUS = (
-        (0, 'draft'),
-        (1, 'public'),
-        (2, 'protected'),
-        (3, 'private')
+        (VisitStatus.Draft, 'draft'),
+        (VisitStatus.Public, 'public'),
+        (VisitStatus.Protected, 'protected'),
+        (VisitStatus.Private, 'private')
     )
     
     COMMENT_STATUS = (
@@ -26,6 +33,7 @@ class Posts(models.Model):
     create_time = models.DateTimeField()
     public_time = models.DateTimeField()
     update_time = models.DateTimeField()
+    content = models.TextField(blank=True, null=True)
     visit_status = models.SmallIntegerField(default=0, choices=VISIT_STATUS)
     comment_status = models.SmallIntegerField(default=0, choices=COMMENT_STATUS)
     password = models.CharField(max_length=64, blank=True, null=True)

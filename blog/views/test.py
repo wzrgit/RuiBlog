@@ -7,6 +7,6 @@ from blog.views import common
 def test_base_template(request):
     theme = Options.objects.get(name='theme').value
     assert (len(theme) > 0)
-    content = {'common': common.GetCommons()}
+    content = {'common': common.get_commons(request)}
     print(content)
     return render(request, 'themes/' + theme + '/test_template.html', content)

@@ -8,6 +8,6 @@ def dashboard(request):
     # TODO check auth
     counts = {'posts': Posts.objects.count(),
               'albums': Album.objects.count()}
-    content = {'common': common.GetCommons(),
+    content = {'common': common.get_commons(request),
                'counts': counts}
     return render(request, 'management/dashboard.html', content)

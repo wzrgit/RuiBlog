@@ -20,6 +20,7 @@ from blog.views import test as view_test
 from blog.views.management import management, settings, posts, albums
 
 urlpatterns = [
+    path('^&', view_index.index),
     path('index/', view_index.index),
     path('admin/', admin.site.urls),
     path('test/', view_test.test_base_template),

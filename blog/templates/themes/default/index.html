@@ -13,6 +13,11 @@
 <hr>
 <button type="button" class="btn btn-info">Use Django3</button>
 <button type="button" class="btn btn-success">Bootstrap4 imported</button>
+{% if common.is_login %}
+    <a href="/management/dashboard" target="_blank">管理</a>
+{% else %}
+    <a href="/admin" target="_blank">登录</a>
+{% endif %}
 
 </body>
 </html>

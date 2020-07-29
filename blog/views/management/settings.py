@@ -6,7 +6,7 @@ from blog.models import Options
 
 def settings(request):
     # TODO check auth
-    content = {'common': common.GetCommons()}
+    content = {'common': common.get_commons(request)}
     print(request.method)
     if request.method == 'GET':
         pass
