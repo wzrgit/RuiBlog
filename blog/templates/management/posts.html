@@ -1,5 +1,11 @@
 {% extends 'management/manage_base.html' %}
 {% block title %}Posts{% endblock %}
+
+{% block title_right %}
+    <button class="btn btn-sm btn-info mr-2">CreatePost</button>
+    <button class="btn btn-sm btn-info mr-2">CreateDraft</button>
+{% endblock %}
+
 {% block main_content %}
     <div class="container">
         <div class="row">

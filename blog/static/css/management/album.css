@@ -1,0 +1,26 @@
+#album_list{
+    background-color: #dfe2e5;
+    padding-top: 5px;
+    min-height: 400px;
+}
+
+.album_box {
+    margin-top: 3px;
+    margin-bottom: 5px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+}
+
+.album_cover{
+    height: 180px;
+    max-width: 285px;
+    overflow: hidden;
+    border-radius: 5px
+}
+
+.album_cover img{
+    width: auto;
+    height: 180px;;
+}
