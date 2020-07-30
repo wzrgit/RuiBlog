@@ -28,4 +28,5 @@ urlpatterns = [
     path('management/settings/', settings.settings),
     path('management/posts/', posts.posts),
     path('management/albums/', albums.albums),
+    path('management/create_album/', albums.create_album, name='create_album')
 ]

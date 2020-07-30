@@ -2,30 +2,102 @@
 {% load static %}
 {% block title %}Albums{% endblock %}
 {% block load_import_file %}
-    <link href="{% static 'css/management/album.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'management/album.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'management/album.js' %}"></script>
 {% endblock %}
 
 {% block title_right %}
-    <button class="btn btn-sm btn-info">CreateAlbum</button>
+    <button class="btn btn-sm btn-info" id="bt_album_create" data-toggle="modal" data-target="#modal_create_album">
+        CreateAlbum
+    </button>
+    <div class="modal fade" id="modal_create_album" data-backdrop="static" data-keyboard="false" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">CreateAlbum</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form action="{% url 'create_album' %}" method="POST" id="fm_create_album"
+                              class="form-horizontal" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group row">
+                                <label class="col-form-label col-2" for="album_name">name</label>
+                                <div class="col-10">
+                                    <input type="text" class="form-control" name="album_name" id="album_name" value=""
+                                           required>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-2" for="album_desc">desc</label>
+                                <div class=col-10>
+                                    <input type="text" class="form-control" name="album_desc">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-2" for="create_time">CreateTime</label>
+                                <div class="col-10">
+                                    <input type="date" name="create_time" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="is_show_exif"
+                                           name="is_show_exif">
+                                    <label class="form-check-label col-auto" for="is_show_exif">ShowExif</label>
+                                </div>
+                            </div>
+                            <input type="submit" id="submit_create_album" class="no-display">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" value="Submit" class="btn btn-primary" id="proxy_submit_create_album">Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#submit_create_album').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{% url 'create_album' %}',
+                    type: 'post',
+                    data: $('#fm_create_album').serialize(),
+                    success: function (e) {
+                        console.log(e)
+                    }
+                })
+            });
+            $('#proxy_submit_create_album').click(function () {
+                $('#submit_create_album').click();
+            });
+        })
+    </script>
 {% endblock %}
 
 {% block main_content %}
     <div class="container" id="album_list">
-    <div class="row">
-        {% for i in "1234"|make_list %}
-        <div class="col-3">
-            <div class="album_box">
-                <div style="height: 5px"></div>
-                <div class="album_cover">
-                    <img src="{% static 'img/album_img.jpg' %}">
+        <div class="row">
+            {% for i in "1234"|make_list %}
+                <div class="col-3">
+                    <div class="album_box">
+                        <div style="height: 5px"></div>
+                        <div class="album_cover">
+                            <img src="{% static 'img/album_img.jpg' %}">
+                        </div>
+                        <div class="album_info">
+                            <div>Name</div>
+                            <div>Desc</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="album_info">
-                    <div>Name</div>
-                    <div>Desc</div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     </div>
 {% endblock %}

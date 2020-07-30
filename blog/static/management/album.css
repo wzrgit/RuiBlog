@@ -24,3 +24,7 @@
     width: auto;
     height: 180px;;
 }
+
+#fm_create_album label{
+    text-align: right;
+}

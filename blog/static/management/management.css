@@ -111,6 +111,6 @@ table th, table thead {
   height: 1.5em;
 }
 
-.title_btn {
-
+.no-display{
+  display: none;
 }
