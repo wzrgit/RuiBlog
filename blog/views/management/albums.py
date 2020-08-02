@@ -8,7 +8,9 @@ import json
 
 def albums(request):
     # TODO check auth
-    content = {'common': Common.get_commons(request)}
+    content = {'common': Common.get_commons(request),
+               'albums': Album.objects.all().order_by('-create_time').values()}
+
     return render(request, 'management/albums.html', content)
 
 
@@ -24,7 +26,6 @@ def create_album(request):
         content = Common.get_response_content(False)
     else:
         try:
-            print(request.POST)
             name = request.POST['album_name']
             desc = request.POST['album_desc']
             if 'is_show_exif' in request.POST:

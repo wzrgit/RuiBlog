@@ -14,10 +14,8 @@ def settings(request):
         try:
             Options.objects.filter(name='blog_name').update(value=request.POST['blog_name'])
             Options.objects.filter(name='blog_desc').update(value=request.POST['blog_desc'])
-        except(KeyError):
-            pass
-        else:
-            pass
+        except Exception as e:
+            print(e)
         return HttpResponseRedirect('/management/settings')
     else:
         pass
