@@ -1,6 +1,6 @@
 from django.http import HttpRequest
 from django.shortcuts import render
-from blog.views import common
+from blog.views.common import Common
 from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus
 
 
@@ -12,6 +12,6 @@ def posts(request):
               'private': Posts.objects.filter(visit_status=VisitStatus.Protected).count(),
               'draft': Posts.objects.filter(visit_status=VisitStatus.Draft).count(),
               }
-    content = {'common': common.get_commons(request),
+    content = {'common': Common.get_commons(request),
                'counts': counts}
     return render(request, 'management/posts.html', content)

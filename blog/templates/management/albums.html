@@ -60,17 +60,34 @@
             </div>
         </div>
     </div>
-
+<div class="alert alert-warning alert-dismissible fade show no-display" id="aaa" role="alert">
+  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
     <script>
         $(document).ready(function () {
+
+            {#  submit_create_album  #}
             $('#submit_create_album').click(function (e) {
                 e.preventDefault();
+
+                if ($('#album_name').val() === '')
+                    return;
+
                 $.ajax({
                     url: '{% url 'create_album' %}',
                     type: 'post',
                     data: $('#fm_create_album').serialize(),
-                    success: function (e) {
-                        console.log(e)
+                    success: function (data, status) {
+                        console.log(data, status)
+                        if (status == 'success' && status['status'] == 'success') {
+                            $('#modal_create_album').modal('hide');
+                            $('#aaa').alert()
+                        } else {
+
+                        }
                     }
                 })
             });

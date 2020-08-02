@@ -28,3 +28,7 @@
 #fm_create_album label{
     text-align: right;
 }
+
+#fm_create_album input:invalid{
+    border: 1px solid red;
+}
