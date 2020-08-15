@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block title_right %}
-    <button class="btn btn-sm btn-info mr-2">CreatePost</button>
-    <button class="btn btn-sm btn-info mr-2">CreateDraft</button>
+    <a class="btn btn-sm btn-info mr-2" href="{% url 'create_post' %}">CreatePost</a>
+{#    <button class="btn btn-sm btn-info mr-2">CreateDraft</button>#}
 {% endblock %}
 
 {% block main_content %}

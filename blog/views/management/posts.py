@@ -2,6 +2,7 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from blog.views.common import Common
 from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus
+from .forms import CreatePost
 
 
 def posts(request):
@@ -15,3 +16,17 @@ def posts(request):
     content = {'common': Common.get_commons(request),
                'counts': counts}
     return render(request, 'management/posts.html', content)
+
+
+def create_post(request):
+    if request.method == 'GET':
+        form = CreatePost()
+    elif request.method == 'POST':
+        form = CreatePost(request.POST)
+    else:
+        pass
+
+    content = {'common': Common.get_commons(request),
+               'form': form}
+
+    return render(request, 'management/post_edit.html', content)

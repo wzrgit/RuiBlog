@@ -15,19 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
+from django.conf.urls import url
 from blog.views import index as view_index
 from blog.views import test as view_test
 from blog.views.management import management, settings, posts, albums
 
-urlpatterns = [
+urlpatterns = {
     path('/', view_index.index),
     path('index/', view_index.index),
     path('admin/', admin.site.urls),
     path('test/', view_test.test_base_template),
+    # management
     path('management/', management.dashboard),
     path('management/dashboard/', management.dashboard),
-    path('management/settings/', settings.settings),
     path('management/posts/', posts.posts),
+    path('management/posts/new/', posts.create_post, name='create_post'),
+    path('management/settings/', settings.settings),
     path('management/albums/', albums.albums),
-    path('management/create_album/', albums.create_album, name='create_album')
-]
+    path('management/create_album/', albums.create_album, name='create_album'),
+
+    # ckeditor
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+}

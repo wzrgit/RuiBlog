@@ -1,0 +1,10 @@
+{% extends 'management/manage_base.html' %}
+{% block load_import_file %}
+{% endblock %}
+
+{% block main_content %}
+    <form method="post" action="{% url 'create_post' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    </form>
+{% endblock %}

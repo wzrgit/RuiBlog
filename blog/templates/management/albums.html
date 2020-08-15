@@ -101,21 +101,6 @@
 {% block main_content %}
     <div class="container" id="album_list">
         <div class="row">
-            {% for i in "1234"|make_list %}
-                <div class="col-3">
-                    <div class="album_box">
-                        <div style="height: 5px"></div>
-                        <div class="album_cover">
-                            <img src="{% static 'img/album_img.jpg' %}">
-                        </div>
-                        <div class="album_info">
-                            <div>Name</div>
-                            <div>Desc</div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-
             {% for i in albums %}
                 <div class="col-3">
                     <div class="album_box">
