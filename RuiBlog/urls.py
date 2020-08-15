@@ -14,14 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.urls import include
-from django.conf.urls import url
+from django.urls import path, include
+from django.conf import settings
 from blog.views import index as view_index
 from blog.views import test as view_test
 from blog.views.management import management, settings, posts, albums
 
-urlpatterns = {
+urlpatterns = [
     path('/', view_index.index),
     path('index/', view_index.index),
     path('admin/', admin.site.urls),
@@ -36,5 +35,6 @@ urlpatterns = {
     path('management/create_album/', albums.create_album, name='create_album'),
 
     # ckeditor
-    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-}
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+]
+

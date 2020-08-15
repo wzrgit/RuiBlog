@@ -1,10 +1,56 @@
 {% extends 'management/manage_base.html' %}
+{% load static %}
 {% block load_import_file %}
+    <script type="text/javascript" src=" {% static 'ckeditor/ckeditor-init.js' %}"
+            data-ckeditor-basepath="{% static 'ckeditor/ckeditor/' %}" id="ckeditor-init-script"></script>
+    <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
 {% endblock %}
 
 {% block main_content %}
-    <form method="post" action="{% url 'create_post' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    </form>
+    <div>
+        <form method="post" action="{% url 'create_post' %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="form-group row">
+{#                <label class="col-2">{{ form.f_title.label }}</label>#}
+                <div class="container-fluid">
+                    {{ form.f_title }}
+                </div>
+            </div>
+            <div class="form-group row">
+{#                <label class="col-2">{{ form.f_subtitle.label }}</label>#}
+                <div class="container-fluid">
+                    {{ form.f_subtitle }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2">{{ form.f_public_tm.label }}</label>
+                <div class="col-10">
+                    {{ form.f_public_tm }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2">{{ form.f_visit_status.label }}</label>
+                <div class="col-10">
+                    {{ form.f_visit_status }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2">{{ form.f_pwd.label }}</label>
+                <div class="col-10">
+                    {{ form.f_pwd }}
+                </div>
+            </div>
+            <div class="form-group row disabled">
+                <label class="col-2">{{ form.f_comment_status.label }}</label>
+                <div class="col-10 disabled readonly">
+                    {{ form.f_comment_status }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div>{{ form.f_content }}</div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

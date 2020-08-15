@@ -21,6 +21,8 @@ def posts(request):
 def create_post(request):
     if request.method == 'GET':
         form = CreatePost()
+        form.update_placeholder(['f_title','f_subtitle'])
+        form.fields['f_comment_status'].widget.attrs.update({'readonly': 'readonly', 'disabled': 'disabled'})
     elif request.method == 'POST':
         form = CreatePost(request.POST)
     else:
