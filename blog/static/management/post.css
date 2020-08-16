@@ -1,3 +1,16 @@
-#post_table{
+#post_table {
     margin-top: 15px;
+}
+
+
+/*
+* Styles of post_edit
+*/
+
+#post_form label {
+    text-align: right;
+}
+
+#post_metas {
+    margin-bottom: 15px;
 }

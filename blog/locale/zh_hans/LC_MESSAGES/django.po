@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-15 17:14+0000\n"
+"POT-Creation-Date: 2020-08-16 11:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,34 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: blog/views/management/forms.py:17
+#: blog/views/management/forms.py:30
 msgid "post_title"
 msgstr "标题"
 
-#: blog/views/management/forms.py:18
+#: blog/views/management/forms.py:31
 msgid "post_sub_title"
 msgstr "子标题"
 
-#: blog/views/management/forms.py:19
+#: blog/views/management/forms.py:32
 msgid "post_create_time"
 msgstr "创建时间"
 
-#: blog/views/management/forms.py:20
-msgid "post_public_time"
+#: blog/views/management/forms.py:33
+msgid "post_publish_time"
 msgstr "发布时间"
 
-#: blog/views/management/forms.py:21
+#: blog/views/management/forms.py:34
 msgid "post_update_time"
 msgstr "更新时间"
 
-#: blog/views/management/forms.py:23
+#: blog/views/management/forms.py:36
 msgid "post_visit_status"
 msgstr "允许查看"
 
-#: blog/views/management/forms.py:24
+#: blog/views/management/forms.py:37
 msgid "post_comment_status"
 msgstr "允许评论"
 
-#: blog/views/management/forms.py:25
+#: blog/views/management/forms.py:38
 msgid "post_pwd"
 msgstr "访问密码"

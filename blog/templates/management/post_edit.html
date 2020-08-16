@@ -4,53 +4,91 @@
     <script type="text/javascript" src=" {% static 'ckeditor/ckeditor-init.js' %}"
             data-ckeditor-basepath="{% static 'ckeditor/ckeditor/' %}" id="ckeditor-init-script"></script>
     <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+    <link href="{% static 'management/post.css' %}" type="text/css" rel="stylesheet">
 {% endblock %}
 
 {% block main_content %}
     <div>
-        <form method="post" action="{% url 'create_post' %}">
+        <form id="post_form" method="post" action="{% url 'edit_post' post_id=form.f_id.value %}">
             {% csrf_token %}
             {{ form.non_field_errors }}
 
+            {{ form.f_id }}
+            {{ form.f_create_tm }}
+            {{ form.f_update_tm }}
+
             <div class="form-group row">
-{#                <label class="col-2">{{ form.f_title.label }}</label>#}
                 <div class="container-fluid">
                     {{ form.f_title }}
                 </div>
             </div>
             <div class="form-group row">
-{#                <label class="col-2">{{ form.f_subtitle.label }}</label>#}
                 <div class="container-fluid">
                     {{ form.f_subtitle }}
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-2">{{ form.f_public_tm.label }}</label>
-                <div class="col-10">
-                    {{ form.f_public_tm }}
+            <div class="container" id="post_metas">
+                <div class="row">
+                    <div class="form-group col-6 row">
+                        <label class="col-4">{{ form.f_publish_tm.label }}</label>
+                        <div class="col-8">
+                            {{ form.f_publish_tm }}
+                        </div>
+                    </div>
+                    <div class="form-group col-6 row">
+                        <label class="col-4">{{ form.f_comment_status.label }}</label>
+                        <div class="col-8 disabled readonly">
+                            {{ form.f_comment_status }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-6 row">
+                        <label class="col-4">{{ form.f_visit_status.label }}</label>
+                        <div class="col-8">
+                            {{ form.f_visit_status }}
+                        </div>
+                    </div>
+                    <div class="form-group col-6 row">
+                        <label class="col-4">{{ form.f_pwd.label }}</label>
+                        <div class="col-8">
+                            {{ form.f_pwd }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="col-8"></span>
+                    <span class="col-4"><button class="btn btn-sm btn-primary">Commit</button></span>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-2">{{ form.f_visit_status.label }}</label>
-                <div class="col-10">
-                    {{ form.f_visit_status }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <label class="col-2">{{ form.f_pwd.label }}</label>
-                <div class="col-10">
-                    {{ form.f_pwd }}
-                </div>
-            </div>
-            <div class="form-group row disabled">
-                <label class="col-2">{{ form.f_comment_status.label }}</label>
-                <div class="col-10 disabled readonly">
-                    {{ form.f_comment_status }}
-                </div>
-            </div>
+
             <div class="form-group">
                 <div>{{ form.f_content }}</div>
             </div>
+            <div class="row">
+                <span class="col-8"></span>
+                <span class="col-4"><button class="btn btn-sm btn-primary">Commit</button></span>
+            </div>
         </form>
     </div>
+
+    <script>
+        function post_visit_changed(target) {
+            if (target.selectedIndex == 2) {
+                $('#{{ form.f_pwd.auto_id }}').removeAttr('readonly');
+            } else {
+                $('#{{ form.f_pwd.auto_id }}').attr('readonly', 'readonly');
+            }
+        }
+
+        $('#{{ form.f_visit_status.auto_id }}')[0].onchange = function (e) {
+            post_visit_changed(e.target);
+        };
+
+        $(window).ready(function () {
+            post_visit_changed($('#{{ form.f_visit_status.auto_id }}')[0]);
+        })
+
+    </script>
 {% endblock %}

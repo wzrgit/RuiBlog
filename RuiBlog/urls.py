@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from blog.views import index as view_index
 from blog.views import test as view_test
@@ -29,7 +29,8 @@ urlpatterns = [
     path('management/', management.dashboard),
     path('management/dashboard/', management.dashboard),
     path('management/posts/', posts.posts),
-    path('management/posts/new/', posts.create_post, name='create_post'),
+    path('management/post/edit/', posts.edit_post, name='create_post'),
+    re_path(r'^management/post/edit/(?P<post_id>(\-)?\d+)/$', posts.edit_post, name='edit_post'),
     path('management/settings/', settings.settings),
     path('management/albums/', albums.albums),
     path('management/create_album/', albums.create_album, name='create_album'),
@@ -37,4 +38,3 @@ urlpatterns = [
     # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
-
