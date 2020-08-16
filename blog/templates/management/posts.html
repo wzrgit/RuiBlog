@@ -44,48 +44,23 @@
                 </thead>
                 <tbody>
 
-                <tr>
+                {% for post in post_metas %}
+                    <tr>
                     <td><input type="checkbox"></td>
                     <td class="text-nowrap overflow-hidden">
-                        <a href="#">the title of my post, test for a long text, too see when hide or auto showthe title
-                            of my post, test for a long text, too see when hide or auto showthe title of my post, test
-                            for a long text, too see when hide or auto showthe title of my post, test for a long text,
-                            too see when hide or auto showthe title
-                            of my post, test for a long text, too see when hide or auto showthe title of my post, test
-                            for a long text, too see when hide or auto show</a>
+                        <a href="#">
+                            {{ post.title }} {% if post.subtitle %} / {{ post.subtitle }} {% endif %}
+                        </a>
                     </td>
                     <td scope="col">
                         Travel
                     </td>
                     <td scope="col">
-                        2020-07-20 08:23:55
+                        {{ post.public_time }}
                     </td>
                 </tr>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td class="text-nowrap overflow-hidden">
-                        <a href="#">Another Post Title </a>
-                    </td>
-                    <td scope="col">
-                        Travel
-                    </td>
-                    <td scope="col">
-                        2020-07-20 21:00:21
-                    </td>
-                </tr>
+                {% endfor %}
 
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td class="text-nowrap overflow-hidden">
-                        <a href="#">Another Post Title </a>
-                    </td>
-                    <td scope="col">
-                        Travel
-                    </td>
-                    <td scope="col">
-                        2020-07-20 22:12:41
-                    </td>
-                </tr>
                 </tbody>
             </table>
         </div>

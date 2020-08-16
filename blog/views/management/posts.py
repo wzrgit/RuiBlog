@@ -1,21 +1,32 @@
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils import timezone
 from blog.views.common import Common
 from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus
 from .forms import FormPost
 
 
 def posts(request):
-    # TODO check auth
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('admin:login'))
+
+    post_metas = Posts.objects.values('id', 'title', 'subtitle', 'public_time', 'visit_status').order_by('-public_time')
+    for p in post_metas:
+        categories = CategoryHasPosts.objects.filter(post_id=p['id'])
+        p['categories'] = categories.values()
+
     counts = {'all': Posts.objects.count(),
               'publish': Posts.objects.filter(visit_status=VisitStatus.Public).count(),
               'protected': Posts.objects.filter(visit_status=VisitStatus.Protected).count(),
               'private': Posts.objects.filter(visit_status=VisitStatus.Protected).count(),
               'draft': Posts.objects.filter(visit_status=VisitStatus.Draft).count(),
               }
+
     content = {'common': Common.get_commons(request),
-               'counts': counts}
+               'counts': counts,
+               'post_metas': post_metas,
+               }
     return render(request, 'management/posts.html', content)
 
 
@@ -29,6 +40,9 @@ def edit_post(request, post_id=-1):
 
         if post_id == -1:
             form.fields['f_pwd'].widget.attrs.update({'readonly': 'readonly'})
+            for f in ['f_create_tm', 'f_publish_tm', 'f_update_tm']:
+                form.fields[f].initial = timezone.now()
+
         else:
             pts = Posts.objects.filter(id=post_id)
             if len(pts) > 0:
@@ -74,7 +88,7 @@ def edit_post(request, post_id=-1):
                                             subtitle=f_sub_title,
                                             create_time=f_create_tm,
                                             public_time=f_publish_tm,
-                                            update_time=f_up_tm,
+                                            update_time=timezone.now(),
                                             visit_status=f_visit,
                                             password=f_pwd,
                                             comment_status=f_can_comment,
@@ -86,7 +100,7 @@ def edit_post(request, post_id=-1):
                                                             subtitle=f_sub_title,
                                                             create_time=f_create_tm,
                                                             public_time=f_publish_tm,
-                                                            update_time=f_up_tm,
+                                                            update_time=timezone.datetime.now(),
                                                             visit_status=f_visit,
                                                             password=f_pwd,
                                                             comment_status=f_can_comment,

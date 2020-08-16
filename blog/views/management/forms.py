@@ -29,9 +29,9 @@ class FormPost(RuiBlogForm):
     f_id = forms.IntegerField(required=True, initial=-1)
     f_title = forms.CharField(label=_('post_title'), max_length=255, required=True)
     f_subtitle = forms.CharField(label=gettext('post_sub_title'), max_length=255, required=False)
-    f_create_tm = forms.DateTimeField(label=gettext('post_create_time'), initial=timezone.now())
-    f_publish_tm = forms.DateTimeField(label=gettext('post_publish_time'), initial=timezone.now())
-    f_update_tm = forms.DateTimeField(label=gettext('post_update_time'), initial=timezone.now())
+    f_create_tm = forms.DateTimeField(label=gettext('post_create_time'))
+    f_publish_tm = forms.DateTimeField(label=gettext('post_publish_time'))
+    f_update_tm = forms.DateTimeField(label=gettext('post_update_time'))
     f_content = RichTextUploadingFormField(required=False)
     f_visit_status = forms.ChoiceField(label=_('post_visit_status'), choices=Posts.VISIT_STATUS, initial=1)
     f_comment_status = forms.ChoiceField(label=_('post_comment_status'), choices=Posts.COMMENT_STATUS, initial=0,
