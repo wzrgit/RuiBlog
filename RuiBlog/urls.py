@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.conf import settings
+from django.conf import settings as dj_settings
+from django.conf.urls.static import static
 from blog.views import index as view_index
 from blog.views import test as view_test
 from blog.views.management import management, settings, posts, albums
 
 urlpatterns = [
-    path('/', view_index.index),
+    re_path(r'^$', view_index.index),
     path('index/', view_index.index),
     path('admin/', admin.site.urls),
     path('test/', view_test.test_base_template),
@@ -38,3 +39,5 @@ urlpatterns = [
     # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
+
+urlpatterns += static(dj_settings.MEDIA_URL, document_root=dj_settings.MEDIA_ROOT)

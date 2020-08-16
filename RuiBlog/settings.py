@@ -136,6 +136,7 @@ MEDIA_URL = '/media/'
 
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_BROWSE_SHOW_DIRS = True
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar_mybt': [
@@ -159,6 +160,7 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'mybt',
         'height': 500,
         'width': 1024,
-        # 'extraPlugins': ','.join(['image2']),
+        'extraPlugins': ','.join([
+        ]),
     },
 }

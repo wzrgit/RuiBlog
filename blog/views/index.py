@@ -11,6 +11,6 @@ def index(request):
 
     content = {'blog_name': options.get(name='blog_name').value,
                'blog_desc': options.get(name='blog_desc').value,
-               'common': common.get_commons(request)}
+               'common': common.Common.get_commons(request)}
 
     return render(request, 'themes/' + theme + '/index.html', content)
