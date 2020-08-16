@@ -11,21 +11,9 @@
                     <div class="" style="margin-top: 15px">
                         <span class="fas fa-calendar-alt fa-pd"></span><span>最近文章</span>
                         <ul class="text-nowrap overflow-hidden">
-                            <li>
-                                <a href="#" target="_blank">the title of my post, test for a long text, too see when
-                                    hide or auto showthe title
-                                    of my post, test for a long text, too see when hide or auto showthe title of my
-                                    post, test
-                                    for a long text, too see when hide or auto showthe title of my post, test for a long
-                                    text,
-                                    too see when hide or auto showthe title
-                                    of my post, test for a long text, too see when hide or auto showthe title of my
-                                    post, test
-                                    for a long text, too see when hide or auto show</a>
-                            </li>
-                            <li><a href="#" target="_blank">Another Post Title </a></li>
-                            <li><a href="#" target="_blank">Another Post Title </a></li>
-
+                            {% for post in recent_posts %}
+                                <li><a href="#" target="_blank">{{ post.public_time }} / {{ post.title }}{% if post.subtitle %} / {{ post.subtitle }}{% endif %}</a></li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
