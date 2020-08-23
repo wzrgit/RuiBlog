@@ -19,13 +19,16 @@ from django.conf import settings as dj_settings
 from django.conf.urls.static import static
 from blog.views import index as view_index
 from blog.views import test as view_test
+from blog.views import posts as view_posts
 from blog.views.management import management, settings, posts, albums
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    # views
     re_path(r'^$', view_index.index),
     path('index/', view_index.index),
-    path('admin/', admin.site.urls),
     path('test/', view_test.test_base_template),
+    re_path('^posts(/page/(?P<curr_page>\d+))?/$', view_posts.post_list, name='posts_list'),
     # management
     path('management/', management.dashboard),
     path('management/dashboard/', management.dashboard),

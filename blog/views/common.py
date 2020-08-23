@@ -8,6 +8,7 @@ class Common:
         options = Options.objects.all()
         common = {'blog_name': options.get(name='blog_name').value,
                   'blog_desc': options.get(name='blog_desc').value,
+                  'theme': options.get(name='theme').value,
                   'categories': PostCategory.objects.values(),
                   'is_login': request.user.is_authenticated
                   }

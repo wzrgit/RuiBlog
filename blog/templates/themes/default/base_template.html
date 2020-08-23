@@ -9,6 +9,7 @@
     <script src="{% static 'libs/bootstrap/js/bootstrap.min.js' %}"></script>
     <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'themes/default/css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet">
     {% block page_import_files %} {% endblock %}
 </head>
 <body>
@@ -21,11 +22,11 @@
             <ul class="navbar-nav">
                 {#                <li class="nav-item"><a id="nav-column-home" class="nav-link" href="/album">首页</a></li>#}
                 <li class="nav-item"><a id="nav-column-album" class="nav-link" href="/album">相册</a></li>
-                <li class="nav-item"><a id="nav-column-post" class="nav-link" href="/post">存档</a></li>
-{#                {% for category in common.categories %}#}
-{#                    <li class="nav-item"><a id="nav-column-{{ category.id }}" class="nav-link"#}
-{#                                            href="/album">{{ category.name }}</a></li>#}
-{#                {% endfor %}#}
+                <li class="nav-item"><a id="nav-column-post" class="nav-link" href="{% url 'posts_list' %}">存档</a></li>
+                {#                {% for category in common.categories %}#}
+                {#                    <li class="nav-item"><a id="nav-column-{{ category.id }}" class="nav-link"#}
+                {#                                            href="/album">{{ category.name }}</a></li>#}
+                {#                {% endfor %}#}
             </ul>
         </div>
     </div>

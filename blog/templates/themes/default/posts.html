@@ -1,0 +1,30 @@
+{% extends 'themes/default/base_template.html' %}
+{% load static %}
+
+{% block page_title %}
+{% endblock %}
+
+{% block page_import_files %}
+{% endblock %}
+
+
+{% block page_content %}
+    <div class="container">
+        <div>
+            <ul>
+                {% for post in posts %}
+                    <ui><h5>{{ post.title }} {{ post.visit_status.get_visit_status_display }}
+                    </h5>
+                        {% if post.visit_status == 2 %}
+                            <span class="fas fa-lock fa-pd"></span>
+                        {% elif post.visit_status == 3 %}
+                            <span class="fas fa-eye-slash fa-pd"></span>
+                        {% endif %}{{ post.public_time }}
+                    </ui>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock page_content %}
+
