@@ -11,18 +11,29 @@
 {% block page_content %}
     <div class="container">
         <div>
-            <ul>
-                {% for post in posts %}
-                    <ui><h5>{{ post.title }} {{ post.visit_status.get_visit_status_display }}
-                    </h5>
+            {% for cat in categories %}
+                <span cat_id={{ cat.id }}>{{ cat.name }}</span>
+            {% endfor %}
+        </div>
+        <div class="posts-container">
+            {% for post in posts %}
+                <div class="post-meta">
+                    <h5 class="text-center">{{ post.title }}</h5>
+                    <h6 class="text-center">{{ post.subtitle }}</h6>
+                    <div class="text-center">
                         {% if post.visit_status == 2 %}
                             <span class="fas fa-lock fa-pd"></span>
                         {% elif post.visit_status == 3 %}
                             <span class="fas fa-eye-slash fa-pd"></span>
-                        {% endif %}{{ post.public_time }}
-                    </ui>
-                {% endfor %}
-            </ul>
+                        {% endif %}
+                        <span>{{ post.public_time }}</span>
+                    </div>
+                    <div class="post-thumb">
+                        {{ post.content }}
+                    </div>
+                <hr>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
