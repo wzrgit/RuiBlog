@@ -21,7 +21,8 @@
         <div>
             <ul class="navbar-nav">
                 {#                <li class="nav-item"><a id="nav-column-home" class="nav-link" href="/album">首页</a></li>#}
-                <li class="nav-item"><a id="nav-column-album" class="nav-link" href="/album">相册</a></li>
+                <li class="nav-item"><a id="nav-column-album" class="nav-link" href="{% url 'albums_list' %}">相册</a>
+                </li>
                 <li class="nav-item"><a id="nav-column-post" class="nav-link" href="{% url 'posts_list' %}">存档</a></li>
                 {#                {% for category in common.categories %}#}
                 {#                    <li class="nav-item"><a id="nav-column-{{ category.id }}" class="nav-link"#}
@@ -36,7 +37,8 @@
 
 <footer class="footer bg-light">
     <div class="container">
-        <div class="text-center" id="copy_right">copyright &copy; ruiblog@2020</div>
+        <div class="text-center" id="copy_right">copyright &copy; ruiblog@2020 <span><a href="{% url 'admin:login' %}">Admin</a></span>
+        </div>
     </div>
 </footer>
 </body>

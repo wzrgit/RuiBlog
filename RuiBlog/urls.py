@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from blog.views import index as view_index
 from blog.views import test as view_test
 from blog.views import posts as view_posts
+from blog.views import album as view_albums
 from blog.views.management import management, settings, posts, albums
 
 urlpatterns = [
@@ -29,6 +30,9 @@ urlpatterns = [
     path('index/', view_index.index),
     path('test/', view_test.test_base_template),
     re_path('^posts(/page/(?P<curr_page>\d+))?/$', view_posts.post_list, name='posts_list'),
+    path('post/<int:post_id>', view_test.test_base_template, name='post_view'),  # TODO
+    path('albums/', view_albums.albums_list , name='albums_list'),
+    re_path('^album/(?P<album_id>\d+)(/page/(?P<curr_page>\d+))?/$', view_albums.album_view),  # TODO
     # management
     path('management/', management.dashboard),
     path('management/dashboard/', management.dashboard),
