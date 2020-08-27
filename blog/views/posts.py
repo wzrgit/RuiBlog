@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus
 from .common import Common
 
@@ -33,9 +35,28 @@ def post_list(request, curr_page=0, category=-1):
 
     content = {'common': Common.get_commons(request),
                'posts': posts,
-               'categories':categories}
+               'categories': categories}
 
     theme = Common.get_commons(request)['theme']
     assert len(theme) > 0
 
     return render(request, 'themes/' + theme + '/posts.html', content)
+
+
+def post_view(request, post_id):
+    common = Common.get_commons(request)
+    try:
+        pt = Posts.objects.get(id=post_id)
+    except Posts.DoesNotExist:
+        return HttpResponseRedirect('404.html')
+
+    if not request.user.is_authenticated:
+        if pt.visit_status in [VisitStatus.Private, VisitStatus.Draft]:
+            return HttpResponseRedirect(reverse('admin:login'))
+        if pt.visit_status == VisitStatus.Protected:
+            pass
+
+    content = {'common': common,
+               'post': pt}
+
+    return render(request, 'themes/' + common['theme'] + '/post_view.html', content)
