@@ -53,10 +53,17 @@ class CategoryHasPosts(models.Model):
     
 
 class Album(models.Model):
+    VISIT_STATUS = (
+        (VisitStatus.Draft, 'draft'),
+        (VisitStatus.Public, 'public'),
+        (VisitStatus.Protected, 'protected'),
+        (VisitStatus.Private, 'private')
+    )
     title = models.CharField(max_length=64)
     desc = models.CharField(max_length=512, blank=True, null=True)
     cover_img = models.CharField(max_length=255, blank=True)
     show_exif = models.BooleanField(default=False)
+    visit_status = models.SmallIntegerField(default=VisitStatus.Public, choices=VISIT_STATUS)
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
     remark = models.CharField(max_length=512, blank=True, null=True)

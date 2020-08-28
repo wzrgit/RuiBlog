@@ -7,4 +7,18 @@
 {% endblock %}
 
 {% block page_content %}
+    <div class="container">
+        <div id="album-list">
+            {% for album in albums %}
+                <div>
+                    <a>
+                        <img src="#">
+                    </a>
+                    <h5>{{ album.title }}</h5>
+                    <span>{{ album.desc }}</span>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
