@@ -21,13 +21,13 @@ from blog.views import index as view_index
 from blog.views import test as view_test
 from blog.views import posts as view_posts
 from blog.views import album as view_albums
-from blog.views.management import management, settings, posts, albums
+from blog.views.management import management, settings as mgr_settings, posts as mgr_posts, albums as mgr_albums
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # views
-    re_path(r'^$', view_index.index),
+    re_path(r'^$', view_test.test_base_template),  # TODO
     path('index/', view_index.index),
     path('test/', view_test.test_base_template),
     re_path('^posts(/page/(?P<curr_page>\d+))?/$', view_posts.post_list, name='posts_list'),
@@ -38,12 +38,13 @@ urlpatterns = [
     # management
     path('management/', management.dashboard),
     path('management/dashboard/', management.dashboard),
-    path('management/posts/', posts.posts),
-    path('management/post/edit/', posts.edit_post, name='create_post'),
-    re_path(r'^management/post/edit/(?P<post_id>(\-)?\d+)/$', posts.edit_post, name='edit_post'),
-    path('management/settings/', settings.settings),
-    path('management/albums/', albums.albums),
-    path('management/create_album/', albums.create_album, name='create_album'),
+    path('management/posts/', mgr_posts.posts),
+    path('management/post/edit/', mgr_posts.edit_post, name='create_post'),
+    re_path(r'^management/post/edit/(?P<post_id>(\-)?\d+)/$', mgr_posts.edit_post, name='edit_post'),
+    path('management/settings/', mgr_settings.settings),
+    path('management/albums/', mgr_albums.albums),
+    path('management/create_album/', mgr_albums.create_album, name='create_album'),
+    path('management/albums/edit/<int:album_id>', mgr_albums.edit_album, name='edit_album'),
 
     # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),

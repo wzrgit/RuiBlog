@@ -1,4 +1,4 @@
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponseNotFound
 from blog.models import Options, PostCategory
 
 
@@ -23,3 +23,7 @@ class Common:
             content = {'status': 'error'}
 
         return content
+    
+    @staticmethod
+    def redirect_to_404(request):
+        return HttpResponseNotFound()

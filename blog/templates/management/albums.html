@@ -106,7 +106,7 @@
                     <div class="album_box">
                         <div style="height: 5px"></div>
                         <div class="album_cover">
-                            <img src="{% static 'img/album_img.jpg' %}">
+                            <a href="{% url 'edit_album' i.id %}"><img src="{% static 'img/album_img.jpg' %}"></a>
                         </div>
                         <div class="album_info">
                             <div class="album_title"><h6>{{ i.title }}</h6></div>

@@ -1,0 +1,123 @@
+{% extends "management/manage_base.html" %}
+{% load static %}
+{% block load_import_file %}
+    <link href="{% static "/management/album.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div id="album_meta" class="col-6 border-right">
+                <h5>Album Info:</h5>
+                <form id="fm_album_meta" method="POST" action="{% url 'edit_album' album_meta_form.f_id.value %}">
+                    {% csrf_token %}
+                    {{ album_meta_form.f_id }}
+
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label">{{ album_meta_form.f_title.label }}</label>
+                        <div class="col-9">{{ album_meta_form.f_title }}</div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label">{{ album_meta_form.f_desc.label }}</label>
+                        <div class="col-9">{{ album_meta_form.f_desc }}</div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label">{{ album_meta_form.f_visit_status.label }}</label>
+                        <div class="col-9">{{ album_meta_form.f_visit_status }}</div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label">{{ album_meta_form.f_pwd.label }}</label>
+                        <div class="col-9">{{ album_meta_form.f_pwd }}</div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label">{{ album_meta_form.f_create_time.label }}</label>
+                        <div class="col-9">{{ album_meta_form.f_create_time }}</div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9 input-group form-row">
+                            <label class="col-form-label checkbox-inline"
+                                   for="{{ album_meta_form.f_show_exif.auto_id }}">{{ album_meta_form.f_show_exif }} {{ album_meta_form.f_show_exif.label }}</label>
+                        </div>
+                    </div>
+
+                </form>
+                <div class="row">
+                    <div class="col-8"></div>
+                    <button class="btn btn-sm btn-primary" id="btn_album_meta_update">Update</button>
+                </div>
+            </div>
+
+            <div id="img_upload" class="col-6">
+                <h5>Upload Image:</h5>
+                <form id="fm_up_img" method="POST" action="#">
+                    {% csrf_token %}
+
+                    <div class="form-group form-row">
+                        <label class="col-3 col-form-label">{{ upload_photo_form.f_alias.label }}</label>
+                        <div class="col-9">{{ upload_photo_form.f_alias }}</div>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <label class="col-3 col-form-label">{{ upload_photo_form.f_desc.label }}</label>
+                        <div class="col-9">{{ upload_photo_form.f_desc }}</div>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <label class="col-3 col-form-label">{{ upload_photo_form.f_img.label }}</label>
+                        <div class="col-9">{{ upload_photo_form.f_img }}</div>
+                    </div>
+                    <img id="up_img_preview">
+
+                    <div class="row bottom">
+                        <div class="col-8"></div>
+                        <button type="submit" class="btn btn-sm btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div id="photo_upload">
+
+        </div>
+        <div id="album_photos">
+            {% for pic in photos %}
+                <div class="photo_box">
+                    <img src="#">
+                    <div></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#btn_album_meta_update').click(function (e) {
+                e.preventDefault();
+                // TODO check fields
+                $.ajax({
+                    url: "{% url 'edit_album' album_id=album_meta_form.f_id.value %}",
+                    method: 'post',
+                    data: $('#fm_album_meta').serialize(),
+                    success: function (data, status) {
+                        console.log(data)
+                    }
+                })
+            });
+
+            $('#{{ upload_photo_form.f_img.auto_id}}').change(function (e) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('up_img_preview').src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+
+        })
+    </script>
+{% endblock %}

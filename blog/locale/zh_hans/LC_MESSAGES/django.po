@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-16 11:27+0800\n"
+"POT-Creation-Date: 2020-08-30 21:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,42 @@ msgstr "允许查看"
 msgid "post_comment_status"
 msgstr "允许评论"
 
-#: blog/views/management/forms.py:38
+#: blog/views/management/forms.py:39
 msgid "post_pwd"
 msgstr "访问密码"
+
+#: blog/views/management/forms.py:44
+msgid "album_title"
+msgstr "标题"
+
+#: blog/views/management/forms.py:45
+msgid "album_desc"
+msgstr "描述"
+
+#: blog/views/management/forms.py:46
+msgid "album_show_exif"
+msgstr "显示 EXIF"
+
+#: blog/views/management/forms.py:47
+msgid "album_visit_status"
+msgstr "允许查看"
+
+#: blog/views/management/forms.py:48
+msgid "album_pwd"
+msgstr "访问密码"
+
+#: blog/views/management/forms.py:49
+msgid "album_create_time"
+msgstr "创建时间"
+
+#: blog/views/management/forms.py:53
+msgid "photo_alias"
+msgstr "名称"
+
+#: blog/views/management/forms.py:54
+msgid "photo_desc"
+msgstr "描述"
+
+#: blog/views/management/forms.py:55
+msgid "photo_image"
+msgstr "图片"

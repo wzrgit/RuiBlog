@@ -5,7 +5,7 @@ import datetime
 from ckeditor.widgets import CKEditorWidget
 from ckeditor.fields import RichTextField, RichTextFormField
 from ckeditor_uploader.fields import RichTextUploadingFormField
-from blog.models import Posts
+from blog.models import Posts, Album
 
 
 class RuiBlogForm(forms.Form):
@@ -37,3 +37,19 @@ class FormPost(RuiBlogForm):
     f_comment_status = forms.ChoiceField(label=_('post_comment_status'), choices=Posts.COMMENT_STATUS, initial=0,
                                          required=False)
     f_pwd = forms.CharField(label=_('post_pwd'), max_length=32, required=False)
+
+
+class FormAlbumMeta(RuiBlogForm):
+    f_id = forms.IntegerField(required=True)
+    f_title = forms.CharField(label=_('album_title'), max_length=128, required=True)
+    f_desc = forms.CharField(label=_('album_desc'), max_length=511, required=False)
+    f_show_exif = forms.BooleanField(label=_('album_show_exif'), required=False)
+    f_visit_status = forms.ChoiceField(label=_('album_visit_status'), choices=Album.VISIT_STATUS)
+    f_pwd = forms.CharField(label=_('album_pwd'), max_length=32, required=False)
+    f_create_time = forms.DateTimeField(label=_('album_create_time'), required=False)
+
+
+class FormUploadImage(RuiBlogForm):
+    f_alias = forms.CharField(label=_('photo_alias'), required=False)
+    f_desc = forms.CharField(label=_('photo_desc'), required=False)
+    f_img = forms.ImageField(label=_('photo_image'), widget=forms.FileInput())
