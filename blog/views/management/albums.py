@@ -1,28 +1,35 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.shortcuts import render, reverse
+from django.contrib.auth.decorators import login_required
 from blog.views.common import Common
 from blog.models import Album, Photos, VisitStatus
 from blog.views.management.forms import FormAlbumMeta, FormUploadImage
-import datetime
+import RuiBlog.settings as blog_settings
+import datetime, os
+from PIL import Image, ExifTags
 import json
 
 
+@login_required
 def albums(request):
-    # TODO check auth
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('admin:login'))
+
     content = {'common': Common.get_commons(request),
                'albums': Album.objects.all().order_by('-create_time').values()}
 
     return render(request, 'management/albums.html', content)
 
 
+@login_required
 def create_album(request):
     """
     :param request:
     :return:
     """
-    # if not request.user.is_authenticated:
-    #     pass
-    #
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('admin:login'))
+
     if request.method != 'POST':
         content = Common.get_response_content(False)
     else:
@@ -50,7 +57,10 @@ def create_album(request):
     return JsonResponse(content, safe=False)
 
 
+@login_required
 def edit_album(request, album_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('admin:login'))
     common = Common.get_commons(request)
     if request.method == "GET":
         try:
@@ -72,12 +82,13 @@ def edit_album(request, album_id):
         form.fields['f_id'].widget.attrs['class'] += ' d-none'
 
         form_photo = FormUploadImage()
-        photos = Photos.objects.filter(album_id=album_id).values()
+        photos = Photos.objects.filter(album_id=album_id).order_by('-create_time').values()
 
         content = {'common': common,
                    'album_meta_form': form,
                    'upload_photo_form': form_photo,
-                   'photos': photos
+                   'photos': photos,
+                   'album_id': album_id
                    }
         return render(request, 'management/album_edit.html', content)
 
@@ -85,6 +96,7 @@ def edit_album(request, album_id):
         return update_album(request, album_id)
 
 
+@login_required
 def update_album(request, album_id):
     """
     JSON interface
@@ -133,14 +145,98 @@ def update_album(request, album_id):
     return JsonResponse(content, safe=False)
 
 
+@login_required
 def upload_photo(request, album_id):
-    """
-    JSON interface
-    :param request:
-    :param album_id:
-    :return:
-    """
-    pass
+    if request.method != "POST":
+        return HttpResponseBadRequest()
+
+    form = FormUploadImage(request.POST, request.FILES)
+    if not form.is_valid():
+        return HttpResponseBadRequest()
+
+    img_file = request.FILES['f_img']
+    pic_name = img_file._get_name()
+    tm = datetime.datetime.now()
+    tmf = tm.strftime('%Y%m%d%H%M%S%f')[:-3]
+    pic_name = tmf + '_' + pic_name
+
+    album_path = blog_settings.MEDIA_ROOT + 'res/pic/' + str(album_id)
+    exif = handle_save_pic(album_path, pic_name, img_file)
+    exif_str = json.dumps(exif)
+    if '\x00' in exif_str:
+        exif_str = exif_str.replace('\x00', '')
+    if '\u0000' in exif_str:
+        exif_str = exif_str.replace('\u0000', '')
+
+    alias = form.cleaned_data['f_alias']
+    if not alias:
+        alias = img_file._get_name()
+    desc = form.cleaned_data['f_desc']
+
+    Photos.objects.create(album_id=album_id, name=pic_name, alias=alias, desc=desc, exif=exif_str, create_time=tm,
+                          update_time=tm)
+
+    return HttpResponseRedirect(reverse('edit_album', args=[album_id]))
+
+
+def check_folders(album_path):
+    for p in [album_path, album_path + '/thumb_m', album_path + '/thumb_s']:
+        if not os.path.exists(p):
+            os.makedirs(p)
+
+
+def handle_save_pic(album_path, file_name, img_file):
+    check_folders(album_path)
+
+    full_path = album_path + '/' + file_name
+    with open(full_path, 'wb+') as destination:
+        for chunk in img_file.chunks():
+            destination.write(chunk)
+    img = Image.open(img_file)
+    exif = get_exif(img)
+    compress_thumb(img, album_path, file_name)
+    img.close()
+
+    return exif
+
+
+def compress_thumb(img, album_path, file_name):
+    if img.width > 600 and img.height > 600:
+        if img.width > img.height:
+            m = 600 * img.width / img.height
+            s = 256 * img.width / img.height
+        else:
+            m = 600 * img.height / img.width
+            s = 256 * img.height / img.width
+        img.thumbnail((m, m))
+        img.save(album_path + '/thumb_m/' + file_name)
+        img.thumbnail((s, s))
+        img.save(album_path + '/thumb_s/' + file_name)
+    else:
+        img.save(album_path + '/thumb_m/' + file_name)
+        img.save(album_path + '/thumb_s/' + file_name)
+
+
+def get_exif(img):
+    info = img._getexif()
+    if not info:
+        return {}
+    tg = {}
+    for tag, value in info.items():
+        decoded = ExifTags.TAGS.get(tag, tag)
+        tg[decoded] = value
+    ret_obj = {}
+    ret_obj['Model'] = tg.get('Model')
+    ret_obj['LensModel'] = tg.get('LensModel')
+    if 'FNumber' in tg:
+        ret_obj['FNumber'] = int(tg['FNumber'][0] / tg['FNumber'][1])
+    if 'FocalLength' in tg:
+        ret_obj['FocalLength'] = int(tg['FocalLength'][0] / tg['FocalLength'][1])
+    ret_obj['ISOSpeedRatings'] = tg.get('ISOSpeedRatings')
+    if 'ExposureTime' in tg:
+        ret_obj['ExposureTime'] = str(tg['ExposureTime'][0]) + '/' + str(tg['ExposureTime'][1])
+
+    return ret_obj
 
 
 def update_photo(request, photo_id):

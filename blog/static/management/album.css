@@ -1,4 +1,4 @@
-#album_list{
+#album_list {
     background-color: #dfe2e5;
     padding-top: 5px;
     min-height: 800px;
@@ -13,27 +13,32 @@
     position: relative;
 }
 
-.album_cover{
+.album_cover {
     height: 180px;
     max-width: 285px;
     overflow: hidden;
     border-radius: 5px
 }
 
-.album_cover img{
+.album_cover img {
     width: auto;
     height: 180px;;
 }
 
-#fm_create_album label{
+#fm_create_album label {
     text-align: right;
 }
 
-#fm_create_album input:invalid{
+#fm_create_album input:invalid {
     border: 1px solid red;
 }
 
 #up_img_preview {
     height: 165px;
     max-height: 170px;
+}
+
+.photo_box {
+    height: 256px;
+    width: 256px;
 }

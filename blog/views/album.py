@@ -12,11 +12,13 @@ def albums_list(request):
             '-create_time').values()
 
     for album in albums:
-        count = Photos.objects.all().count()
+        count = len(Photos.objects.filter(album_id=album['id']))
         album['count'] = count
         if count > 0:
-            if not album.cover_img or len(album.cover_img) == 0:
-                cover = Photos.objects.filter(album_id=album.id).order_by('-create_time')[0]
+            if not album['cover_img'] or len(album['cover_img']) == 0:
+                imgs = Photos.objects.filter(album_id=album['id']).order_by('-create_time')
+                if len(imgs) > 0:
+                    album['cover_img'] = imgs[0]
 
     albums = list(filter(lambda a: a['count'] != 0, albums))
 

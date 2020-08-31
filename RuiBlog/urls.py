@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.contrib import admin, auth
 from django.urls import path, include, re_path
 from django.conf import settings as dj_settings
 from django.conf.urls.static import static
@@ -25,6 +25,7 @@ from blog.views.management import management, settings as mgr_settings, posts as
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
 
     # views
     re_path(r'^$', view_test.test_base_template),  # TODO
@@ -34,6 +35,7 @@ urlpatterns = [
     path('post/<int:post_id>', view_posts.post_view, name='post_view'),
     path('albums/', view_albums.albums_list, name='albums_list'),
     re_path('^album/(?P<album_id>\d+)(/page/(?P<curr_page>\d+))?/$', view_albums.album_view),
+    path('album/upload_img/<int:album_id>', mgr_albums.upload_photo, name='upload_image'),
 
     # management
     path('management/', management.dashboard),
