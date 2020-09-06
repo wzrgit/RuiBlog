@@ -60,7 +60,7 @@ class Album(models.Model):
     )
     title = models.CharField(max_length=64)
     desc = models.CharField(max_length=512, blank=True, null=True)
-    cover_img = models.CharField(max_length=255, blank=True)
+    cover_img = models.IntegerField(blank=True, null=True)
     show_exif = models.BooleanField(default=False)
     visit_status = models.SmallIntegerField(default=VisitStatus.Public, choices=VISIT_STATUS)
     password = models.CharField(max_length=32, blank=True, default="")

@@ -1,7 +1,34 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from blog.models import Album, Photos, VisitStatus
+import RuiBlog.settings as blog_settings
 from .common import Common
+
+
+def photo_make_path(photo):
+    photo['path'] = blog_settings.PHOTO_PATH_PREFIX + str(photo['album_id']) + '/' + photo['name']
+    photo['thumb_m'] = blog_settings.PHOTO_PATH_PREFIX + str(photo['album_id']) + '/thumb_m/' + photo['name']
+    photo['thumb_s'] = blog_settings.PHOTO_PATH_PREFIX + str(photo['album_id']) + '/thumb_s/' + photo['name']
+
+
+def check_cover_img(album):
+    if album['cover_img']:
+        photo_id = album['cover_img']
+        photo = Photos.objects.filter(id=photo_id).values()
+        if len(photo) > 0:
+            cover = photo[0]
+            photo_make_path(cover)
+            album['cover_img'] = cover
+            return True
+
+    photos = Photos.objects.filter(album_id=album['id']).order_by('create_time').values()
+    if len(photos) > 0:
+        cover = photos[0]
+        photo_make_path(cover)
+        album['cover_img'] = cover
+        return True
+
+    return False
 
 
 def albums_list(request):
@@ -12,13 +39,9 @@ def albums_list(request):
             '-create_time').values()
 
     for album in albums:
+        check_cover_img(album)
         count = len(Photos.objects.filter(album_id=album['id']))
         album['count'] = count
-        if count > 0:
-            if not album['cover_img'] or len(album['cover_img']) == 0:
-                imgs = Photos.objects.filter(album_id=album['id']).order_by('-create_time')
-                if len(imgs) > 0:
-                    album['cover_img'] = imgs[0]
 
     albums = list(filter(lambda a: a['count'] != 0, albums))
 
@@ -31,5 +54,13 @@ def albums_list(request):
 
 def album_view(request, album_id, curr_page=0):
     common = Common.get_commons(request)
-    content = {'common': common}
-    return render(request, 'themes/' + common['theme'] + '/albums.html', content)
+    album = Album.objects.get(id=album_id)
+    photos = Photos.objects.filter(album_id=album_id).order_by('-create_time').values()
+    for p in photos:
+        photo_make_path(p)
+
+    content = {'common': common,
+               'photos': photos,
+               'album': album}
+
+    return render(request, 'themes/' + common['theme'] + '/album_view.html', content)

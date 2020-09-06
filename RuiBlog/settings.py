@@ -136,6 +136,8 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
+PHOTO_PATH_PREFIX = 'res/pic/'
+
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_BROWSE_SHOW_DIRS = True

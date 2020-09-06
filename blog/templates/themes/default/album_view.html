@@ -1,0 +1,27 @@
+{% extends 'themes/default/base_template.html' %}
+{% load static %}
+
+{% block page_import_files %}
+{% endblock %}
+
+{% block page_title %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="container">
+        <div id="album_meta">
+            <h5>{{ album.title }}</h5>
+            <span>{{ album.desc }}</span>
+        </div>
+        <div id="album_photos">
+            <div class="container row">
+                {% for p in photos %}
+                    <div class="col-3">
+                        <img src="{% get_media_prefix %}{{ p.thumb_s }}">
+                    <spa>{{ p.asias }}</spa>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

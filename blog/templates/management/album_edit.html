@@ -89,7 +89,7 @@
         <div id="album_photos" class="row container-fluid">
             {% for pic in photos %}
                 <div class="photo_box col-3">
-                    <img src="{% get_media_prefix %}res/pic/{{ album_id }}/{{ pic.name }}" class="img-fluid w-100">
+                    <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="img-fluid w-100">
                     <div></div>
                 </div>
             {% endfor %}

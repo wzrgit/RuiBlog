@@ -106,11 +106,13 @@
                     <div class="album_box">
                         <div style="height: 5px"></div>
                         <div class="album_cover">
-                            <a href="{% url 'edit_album' i.id %}"><img src="{% static 'img/album_img.jpg' %}"></a>
+                            <a href="{% url 'edit_album' i.id %}"><img src="
+                                    {% if i.cover_img %}{% get_media_prefix %}{{ i.cover_img.thumb_s }}{% else %}{% static 'img/album_img.jpg' %}{% endif %}"></a>
                         </div>
                         <div class="album_info">
                             <div class="album_title"><h6>{{ i.title }}</h6></div>
-                            <div class="album_desc">{% if i.desc.strip|length == 0  %}&nbsp;{% else %} {{ i.desc }} {% endif %}</div>
+                            <div class="album_desc">{% if i.desc.strip|length == 0 %}&nbsp;{% else %}
+                                {{ i.desc }} {% endif %}</div>
                         </div>
                     </div>
                 </div>

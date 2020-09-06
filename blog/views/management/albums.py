@@ -2,21 +2,25 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.shortcuts import render, reverse
 from django.contrib.auth.decorators import login_required
 from blog.views.common import Common
+from blog.views import album as view_album
 from blog.models import Album, Photos, VisitStatus
 from blog.views.management.forms import FormAlbumMeta, FormUploadImage
 import RuiBlog.settings as blog_settings
-import datetime, os
+import datetime
+import os
 from PIL import Image, ExifTags
 import json
 
 
 @login_required
 def albums(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('admin:login'))
+    albums_lst = Album.objects.all().order_by('-create_time').values()
+    for album in albums_lst:
+        view_album.check_cover_img(album)
 
+    # TODO check cover_img
     content = {'common': Common.get_commons(request),
-               'albums': Album.objects.all().order_by('-create_time').values()}
+               'albums': albums_lst}
 
     return render(request, 'management/albums.html', content)
 
@@ -27,8 +31,6 @@ def create_album(request):
     :param request:
     :return:
     """
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('admin:login'))
 
     if request.method != 'POST':
         content = Common.get_response_content(False)
@@ -59,8 +61,6 @@ def create_album(request):
 
 @login_required
 def edit_album(request, album_id):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('admin:login'))
     common = Common.get_commons(request)
     if request.method == "GET":
         try:
@@ -83,6 +83,8 @@ def edit_album(request, album_id):
 
         form_photo = FormUploadImage()
         photos = Photos.objects.filter(album_id=album_id).order_by('-create_time').values()
+        for p in photos:
+            view_album.photo_make_path(p)
 
         content = {'common': common,
                    'album_meta_form': form,
@@ -160,7 +162,7 @@ def upload_photo(request, album_id):
     tmf = tm.strftime('%Y%m%d%H%M%S%f')[:-3]
     pic_name = tmf + '_' + pic_name
 
-    album_path = blog_settings.MEDIA_ROOT + 'res/pic/' + str(album_id)
+    album_path = blog_settings.MEDIA_ROOT + blog_settings.PHOTO_PATH_PREFIX + str(album_id)
     exif = handle_save_pic(album_path, pic_name, img_file)
     exif_str = json.dumps(exif)
     if '\x00' in exif_str:
@@ -246,4 +248,8 @@ def update_photo(request, photo_id):
     :param photo_id:
     :return:
     """
+    pass
+
+
+def delete_photo(request, photo_id):
     pass

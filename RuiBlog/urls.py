@@ -34,7 +34,7 @@ urlpatterns = [
     re_path('^posts(/page/(?P<curr_page>\d+))?/$', view_posts.post_list, name='posts_list'),
     path('post/<int:post_id>', view_posts.post_view, name='post_view'),
     path('albums/', view_albums.albums_list, name='albums_list'),
-    re_path('^album/(?P<album_id>\d+)(/page/(?P<curr_page>\d+))?/$', view_albums.album_view),
+    re_path('^album/(?P<album_id>\d+)(/page/(?P<curr_page>\d+))?/$', view_albums.album_view, name='album_view'),
     path('album/upload_img/<int:album_id>', mgr_albums.upload_photo, name='upload_image'),
 
     # management

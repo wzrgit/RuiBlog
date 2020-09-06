@@ -1,5 +1,7 @@
 {% extends 'themes/default/base_template.html' %}
 
+{% load static %}
+
 {% block page_title %}
 {% endblock %}
 
@@ -8,11 +10,11 @@
 
 {% block page_content %}
     <div class="container">
-        <div id="album-list">
+        <div id="album-list" class="row">
             {% for album in albums %}
-                <div>
-                    <a>
-                        <img src="#">
+                <div class="col-3">
+                    <a href="{% url 'album_view' album_id=album.id %}">
+                        <img src="{% get_media_prefix %}{{ album.cover_img.thumb_s }}" class="w-100 img-fluid">
                     </a>
                     <h5>{{ album.title }}</h5>
                     <span>{{ album.desc }}</span>
