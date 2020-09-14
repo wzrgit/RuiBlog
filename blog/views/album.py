@@ -5,6 +5,10 @@ import RuiBlog.settings as blog_settings
 from .common import Common
 
 
+def get_hard_album_path(album_id):
+    return blog_settings.MEDIA_ROOT + blog_settings.PHOTO_PATH_PREFIX + str(album_id)
+
+
 def photo_make_path(photo):
     photo['path'] = blog_settings.PHOTO_PATH_PREFIX + str(photo['album_id']) + '/' + photo['name']
     photo['thumb_m'] = blog_settings.PHOTO_PATH_PREFIX + str(photo['album_id']) + '/thumb_m/' + photo['name']

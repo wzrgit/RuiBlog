@@ -88,16 +88,51 @@
         </div>
         <div id="album_photos" class="row container-fluid">
             {% for pic in photos %}
-                <div class="photo_box col-3">
-                    <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="img-fluid w-100">
-                    <div></div>
+                <div class="photo_box col-3" photo_id="{{ pic.id }}">
+                    <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="img-fluid w-100 photo_img">
+                    <div id="widget_photo_edit_{{ pic.id }}" class="widget_photo_edit" photo_id="{{ pic.id }}">
+                        <span class="btn btn-sm fa fa-pd fa-window-close del_photo" photo_id="{{ pic.id }}"></span>
+                        <span class="btn btn-sm fa fa-pd fa-edit edit_photo" photo_id="{{ pic.id }}"></span>
+                    </div>
                 </div>
             {% endfor %}
         </div>
     </div>
 
+    <div class="fade modal" role="dialog" aria-hidden="true" id="del_pic_dialog" data-keyboard="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Photo</h5>
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal" ><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="content">
+                        <div>
+                            <img src="#" class="m_del_pic_img img-fluid img-thumbnail rounded float-left">
+                            <div class="pl-5">
+                                <div>delete photo?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-danger" id="m_sure_del_pic">Del</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <script>
         $(document).ready(function () {
+            $.ajaxSetup({
+                headers: {"X-CSRFToken": getCookie("csrftoken")}
+            });
+
             $('#btn_album_meta_update').click(function (e) {
                 e.preventDefault();
                 // TODO check fields
@@ -117,6 +152,41 @@
                     document.getElementById('up_img_preview').src = e.target.result;
                 };
                 reader.readAsDataURL(this.files[0]);
+            });
+
+            $('.del_photo').click(function (e) {
+                e.preventDefault();
+                let img_src = $(this).parent().parent().children('img').attr('src');
+                $('#del_pic_dialog').find('img').attr('src', img_src);
+                $('#del_pic_dialog').modal('toggle');
+                // TEST
+                let pid = $(this).attr('photo_id');
+                let url = "{% url 'delete_image' %}";
+                $('#m_sure_del_pic').click(function (e) {
+                    $('#del_pic_dialog').modal('hide');
+
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: {
+                            "photo_id": pid, "album_id":{{ album_meta_form.f_id.value }}
+                        },
+                        dataType: 'json',
+                        success: function (data, status) {
+                            console.log(data, status);
+                            if (data['status'] == 'success') {
+                                $('div[photo_id=' + pid + ']').remove();
+                            } else {
+                                // TODO alert
+                            }
+                        }
+                    });
+
+                });
+
+                return;
+
+
             });
 
         })

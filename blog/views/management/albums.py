@@ -162,9 +162,9 @@ def upload_photo(request, album_id):
     tmf = tm.strftime('%Y%m%d%H%M%S%f')[:-3]
     pic_name = tmf + '_' + pic_name
 
-    album_path = blog_settings.MEDIA_ROOT + blog_settings.PHOTO_PATH_PREFIX + str(album_id)
+    album_path = view_album.get_hard_album_path(album_id)
     exif = handle_save_pic(album_path, pic_name, img_file)
-    exif_str = json.dumps(exif)
+    exif_str = json.dumps(exif, allow_nan=True)
     if '\x00' in exif_str:
         exif_str = exif_str.replace('\x00', '')
     if '\u0000' in exif_str:
@@ -231,12 +231,12 @@ def get_exif(img):
     ret_obj['Model'] = tg.get('Model')
     ret_obj['LensModel'] = tg.get('LensModel')
     if 'FNumber' in tg:
-        ret_obj['FNumber'] = int(tg['FNumber'][0] / tg['FNumber'][1])
+        ret_obj['FNumber'] = float(tg['FNumber'])
     if 'FocalLength' in tg:
-        ret_obj['FocalLength'] = int(tg['FocalLength'][0] / tg['FocalLength'][1])
-    ret_obj['ISOSpeedRatings'] = tg.get('ISOSpeedRatings')
+        ret_obj['FocalLength'] = float(tg['FocalLength'])
     if 'ExposureTime' in tg:
-        ret_obj['ExposureTime'] = str(tg['ExposureTime'][0]) + '/' + str(tg['ExposureTime'][1])
+        ret_obj['ExposureTime'] = float(tg['ExposureTime'])
+    ret_obj['ISOSpeedRatings'] = tg.get('ISOSpeedRatings')
 
     return ret_obj
 
@@ -251,5 +251,32 @@ def update_photo(request, photo_id):
     pass
 
 
-def delete_photo(request, photo_id):
-    pass
+@login_required
+def delete_photo(request):
+    """
+    JSON interface
+    :param request:
+    :param photo_id:
+    :return:
+    """
+    if request.method != 'POST':
+        ret = Common.get_response_content(False)
+
+    photo_id = request.POST.get('photo_id')
+    album_id = request.POST.get('album_id')
+    if not (photo_id or albums):
+        return JsonResponse(Common.get_response_content(False), safe=False)
+
+    photo = Photos.objects.filter(id=photo_id)
+    if len(list(photo)) != 1:
+        ret = Common.get_response_content()
+    else:
+        p = list(photo.values())[0]
+        view_album.photo_make_path(p)
+        photo.delete()
+        os.remove(blog_settings.MEDIA_ROOT + p['path'])
+        os.remove(blog_settings.MEDIA_ROOT + p['thumb_m'])
+        os.remove(blog_settings.MEDIA_ROOT + p['thumb_s'])
+        ret = Common.get_response_content()
+
+    return JsonResponse(ret, safe=False)
