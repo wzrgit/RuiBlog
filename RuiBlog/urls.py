@@ -36,8 +36,8 @@ urlpatterns = [
     path('albums/', view_albums.albums_list, name='albums_list'),
     re_path('^album/(?P<album_id>\d+)(/page/(?P<curr_page>\d+))?/$', view_albums.album_view, name='album_view'),
     path('album/upload_img/<int:album_id>', mgr_albums.upload_photo, name='upload_image'),
-    # re_path('^album/delete_img(/(?P<photo_id>\d+))?/$', mgr_albums.delete_photo, name='delete_image'),
     path('album/delete_img/', mgr_albums.delete_photo, name='delete_image'),
+    path('album/update_img/', mgr_albums.update_photo, name='update_image'),
 
     # management
     path('management/', management.dashboard),

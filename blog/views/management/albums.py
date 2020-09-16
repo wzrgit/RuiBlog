@@ -241,14 +241,30 @@ def get_exif(img):
     return ret_obj
 
 
-def update_photo(request, photo_id):
+def update_photo(request):
     """
     JSON interface
     :param request:
-    :param photo_id:
     :return:
     """
-    pass
+    if request.method != 'POST':
+        ret = Common.get_response_content(False)
+    else:
+        photo_id = request.POST.get('photo_id')
+        alias = request.POST.get('alias')
+        desc = request.POST.get('desc')
+
+        print(request.POST)
+        if not photo_id or int(photo_id) < 0:
+            ret = Common.get_response_content(False)
+        else:
+            if alias:
+                Photos.objects.filter(id=photo_id).update(alias=alias)
+            if desc:
+                Photos.objects.filter(id=photo_id).update(desc=desc)
+            ret = Common.get_response_content(True)
+
+    return JsonResponse(ret, safe=False)
 
 
 @login_required
@@ -256,7 +272,6 @@ def delete_photo(request):
     """
     JSON interface
     :param request:
-    :param photo_id:
     :return:
     """
     if request.method != 'POST':

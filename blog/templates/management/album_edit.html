@@ -84,8 +84,8 @@
         </div>
         <hr>
         <div id="photo_upload">
-
         </div>
+
         <div id="album_photos" class="row container-fluid">
             {% for pic in photos %}
                 <div class="photo_box col-3" photo_id="{{ pic.id }}">
@@ -93,6 +93,10 @@
                     <div id="widget_photo_edit_{{ pic.id }}" class="widget_photo_edit" photo_id="{{ pic.id }}">
                         <span class="btn btn-sm fa fa-pd fa-window-close del_photo" photo_id="{{ pic.id }}"></span>
                         <span class="btn btn-sm fa fa-pd fa-edit edit_photo" photo_id="{{ pic.id }}"></span>
+                    </div>
+                    <div>
+                        <h6 class="photo_alias">{{ pic.alias }}</h6>
+                        <div class="photo_desc">{{ pic.desc }}</div>
                     </div>
                 </div>
             {% endfor %}
@@ -104,7 +108,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Delete Photo</h5>
-                    <button type="button" class="close" aria-label="Close" data-dismiss="modal" ><span
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -116,7 +120,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
@@ -124,7 +127,40 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="fade modal" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false"
+         id="edit_pic_dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Photo Info</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="form_edit_photo" method="POST">
+                        {% csrf_token %}
+
+                        <input type="text" id="m_edit_img_photo_id" name="photo_id" class="no-display">
+                        <div class="form-group form-row">
+                            <label class="col-2 col-form-label">Alias</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" name="alias" id="m_edit_img_photo_alias">
+                            </div>
+                        </div>
+                        <div class="form-group form-row">
+                            <label class="col-2 col-form-label">Desc</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" name="desc" id="m_edit_img_photo_desc">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="m_save_edit_photo">Save</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -133,7 +169,7 @@
                 headers: {"X-CSRFToken": getCookie("csrftoken")}
             });
 
-            $('#btn_album_meta_update').click(function (e) {
+            $("#btn_album_meta_update").click(function (e) {
                 e.preventDefault();
                 // TODO check fields
                 $.ajax({
@@ -159,7 +195,7 @@
                 let img_src = $(this).parent().parent().children('img').attr('src');
                 $('#del_pic_dialog').find('img').attr('src', img_src);
                 $('#del_pic_dialog').modal('toggle');
-                // TEST
+
                 let pid = $(this).attr('photo_id');
                 let url = "{% url 'delete_image' %}";
                 $('#m_sure_del_pic').click(function (e) {
@@ -173,22 +209,55 @@
                         },
                         dataType: 'json',
                         success: function (data, status) {
-                            console.log(data, status);
                             if (data['status'] == 'success') {
                                 $('div[photo_id=' + pid + ']').remove();
                             } else {
                                 // TODO alert
+                                console.log(data);
                             }
                         }
                     });
-
                 });
-
-                return;
-
-
             });
 
+            $('.edit_photo').click(function (e) {
+                e.preventDefault();
+                let pid = $(this).attr('photo_id');
+                let url = "{% url 'update_image' %}";
+
+                var ctl_alias = $(this).parent().parent().find("h6[class='photo_alias']");
+                var ctl_desc = $(this).parent().parent().find("div[class='photo_desc']");
+
+                let alias = ctl_alias.text();
+                let desc = ctl_desc.text();
+
+                $('#m_edit_img_photo_id').attr('value', pid);
+                $('#m_edit_img_photo_alias').attr('value', alias);
+                $('#m_edit_img_photo_desc').attr('value', desc);
+
+                $('#edit_pic_dialog').modal('toggle');
+
+                $('#m_save_edit_photo').click(function (e) {
+                    $('#edit_pic_dialog').modal('hide');
+
+                    let new_alias = $('#m_edit_img_photo_alias').val();
+                    let new_desc = $('#m_edit_img_photo_desc').val();
+                    console.log(new_alias + new_desc)
+                    console.log($('#form_edit_photo').serialize());
+                    $.ajax({
+                        method: 'post',
+                        url: url,
+                        data: $('#form_edit_photo').serialize(),
+                        success: function (data, status) {
+                            ctl_alias.text(new_alias);
+                            ctl_desc.text(new_desc);
+                        },
+                        error: function (msg) {
+                            console.log(msg);
+                        }
+                    });
+                });
+            });
         })
     </script>
 {% endblock %}
