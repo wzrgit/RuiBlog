@@ -36,7 +36,7 @@ def check_cover_img(album):
 
 
 def albums_list(request):
-    if not request.user.is_authenticated:
+    if request.user.is_authenticated:
         albums = Album.objects.all().order_by('-create_time').values()
     else:
         albums = Album.objects.filter(visit_status__in=[VisitStatus.Public, VisitStatus.Protected]).order_by(

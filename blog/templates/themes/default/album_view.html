@@ -18,7 +18,10 @@
                 {% for p in photos %}
                     <div class="col-3">
                         <img src="{% get_media_prefix %}{{ p.thumb_s }}">
-                    <spa>{{ p.asias }}</spa>
+                        <div>
+                            <span>{{ p.alias }}</span>
+                            <div>{{ p.desc }}</div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
