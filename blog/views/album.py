@@ -39,7 +39,7 @@ def albums_list(request):
     if request.user.is_authenticated:
         albums = Album.objects.all().order_by('-create_time').values()
     else:
-        albums = Album.objects.filter(visit_status__in=[VisitStatus.Public, VisitStatus.Protected]).order_by(
+        albums = Album.objects.filter(visit_status__in=[VisitStatus.Public]).order_by(
             '-create_time').values()
 
     for album in albums:
