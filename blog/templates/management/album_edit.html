@@ -6,25 +6,24 @@
 
 {% block main_content %}
     <div class="container">
-        <div aria-live="polite" aria-atomic="true" style="position: relative;">
-            <div style="position: absolute; top: 0; right: 0; z-index:5">
-                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="update_album_alert"
-                     data-delay="2500">
-                    <div class="toast-header">
-                        <span class="fa fa-pd fa-info-circle" style="color:green;" ></span>
-                        <strong class="mr-auto">  RuiBlog         </strong>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="toast-body" id="update_album_alert_content">
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div id="album_meta" class="col-6 border-right">
+                <div aria-live="polite" aria-atomic="true" style="position: relative;">
+                    <div style="position: absolute; top: 0; right: 0; z-index:5">
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="update_album_alert"
+                             data-delay="2000">
+                            <div class="toast-header">
+                                <span class="fa fa-pd fa-info-circle" style="color:green;"></span>
+                                <strong class="mr-auto"> RuiBlog </strong>
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="toast-body" id="update_album_alert_content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <h5>Album Info:</h5>
                 <form id="fm_album_meta" method="POST" action="{% url 'edit_album' album_meta_form.f_id.value %}">
                     {% csrf_token %}

@@ -28,8 +28,8 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 
     # views
-    re_path(r'^$', view_test.test_base_template),  # TODO
-    path('index/', view_index.index),
+    re_path(r'^$', view_test.test_base_template, name='home'),  # TODO
+    path('index/', view_index.index, name='index'),
     path('test/', view_test.test_base_template),
     re_path('^posts(/page/(?P<curr_page>\d+))?/$', view_posts.post_list, name='posts_list'),
     path('post/<int:post_id>', view_posts.post_view, name='post_view'),
@@ -41,7 +41,7 @@ urlpatterns = [
 
     # management
     path('management/', management.dashboard),
-    path('management/dashboard/', management.dashboard),
+    path('management/dashboard/', management.dashboard, name='dashboard'),
     path('management/posts/', mgr_posts.posts),
     path('management/post/edit/', mgr_posts.edit_post, name='create_post'),
     re_path(r'^management/post/edit/(?P<post_id>(\-)?\d+)/$', mgr_posts.edit_post, name='edit_post'),

@@ -24,6 +24,10 @@
                 <li class="nav-item"><a id="nav-column-album" class="nav-link" href="{% url 'albums_list' %}">相册</a>
                 </li>
                 <li class="nav-item"><a id="nav-column-post" class="nav-link" href="{% url 'posts_list' %}">存档</a></li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dash</a></li>
+                {% endif %}
                 {#                {% for category in common.categories %}#}
                 {#                    <li class="nav-item"><a id="nav-column-{{ category.id }}" class="nav-link"#}
                 {#                                            href="/album">{{ category.name }}</a></li>#}
