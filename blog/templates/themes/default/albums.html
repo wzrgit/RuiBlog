@@ -18,14 +18,14 @@
                         <div class="cover_box">
                             <a href="{% url 'album_view' album_id=album.id %}">
                                 <img src="{% get_media_prefix %}{{ album.cover_img.thumb_s }}"
-                                     class="album_cover w-100 img-fluid">
+                                     class="album_cover">
                             </a>
                             <span class="album_meta">
-                                <div class="album_create_time">2020/01/01</div>
-                                <div class="album_images_count">16 张</div>
+                                <div class="album_create_time">{{ album.create_time|date:"Y/m/d" }}</div>
+                                <div class="album_images_count">{{ album.count }} 张</div>
                             </span>
                         </div>
-                        <div>
+                        <div class="album_title">
                             <h5>{{ album.title }}</h5>
                             <span>{{ album.desc }}</span>
                         </div>

@@ -57,6 +57,7 @@ def albums_list(request):
 
 
 def album_view(request, album_id, curr_page=0):
+    # TODO check album can be access
     common = Common.get_commons(request)
     album = Album.objects.get(id=album_id)
     photos = Photos.objects.filter(album_id=album_id).order_by('-create_time').values()

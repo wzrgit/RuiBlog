@@ -1,6 +1,8 @@
 .album_list {
     margin-top: 15px;
     background-color: rgba(185, 200, 195, 0.3);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .album_box {
@@ -8,6 +10,7 @@
     overflow: hidden;
     position: relative;
     margin-top: 10px;
+    /*margin-bottom: 5px;*/
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -22,8 +25,15 @@
 }
 
 .album_cover {
+    object-fit: cover;
+    object-position: 0 0;
     /*height: 200px;*/
-    width: auto;
+    /*display: block;*/
+    width: 100%;
+    height: 100%;
+    /*height: auto;*/
+    /*max-height: 100%;*/
+    /*max-width: 100%;*/
 }
 
 .album_meta {
@@ -53,4 +63,8 @@
     display: inline-block;
     float: right;
     margin-right: 10px;
+}
+
+.album_title {
+    margin-top: 5px;
 }

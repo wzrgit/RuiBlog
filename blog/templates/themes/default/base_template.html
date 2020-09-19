@@ -41,7 +41,10 @@
 
 <footer class="footer bg-light">
     <div class="container">
-        <div class="text-center" id="copy_right">copyright &copy; ruiblog@2020 <span><a href="{% url 'admin:login' %}">Admin</a></span>
+        <div class="text-center" id="copy_right">copyright &copy; ruiblog@2020
+           {% if not user.is_authenticated %} <span><a href="{% url 'admin:login' %}">Admin</a></span>
+           {% else %} <span><a href="{% url 'dashboard' %}" target="_blank">manage</a></span>
+           {% endif %}
         </div>
     </div>
 </footer>
