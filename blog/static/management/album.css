@@ -4,25 +4,30 @@
     min-height: 800px;
 }
 
+.album_col {
+    padding: 0 5px 15px 5px;
+}
+
 .album_box {
-    margin-top: 3px;
-    margin-bottom: 5px;
+    /*margin-top: 3px;*/
+    /*margin-bottom: 5px;*/
     background-color: white;
-    padding-left: 10px;
-    padding-right: 10px;
-    position: relative;
 }
 
 .album_cover {
-    height: 180px;
-    max-width: 285px;
+    margin: 3px 5px;
     overflow: hidden;
-    border-radius: 5px
+    height: 256px;
+    border-radius: 5px;
+    position: relative;
 }
 
-.album_cover img {
-    width: auto;
-    height: 180px;;
+.cover_img {
+    object-fit: cover;
+    object-position: 0 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 #fm_create_album label {
@@ -37,6 +42,10 @@
     height: 165px;
     max-height: 170px;
 }
+
+/*
+* Photos
+*/
 
 .photo_box {
     height: 256px;

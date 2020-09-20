@@ -102,12 +102,15 @@
     <div class="container" id="album_list">
         <div class="row">
             {% for i in albums %}
-                <div class="col-3">
+                <div class="col-3 album_col">
                     <div class="album_box">
                         <div style="height: 5px"></div>
                         <div class="album_cover">
-                            <a href="{% url 'edit_album' i.id %}"><img src="
-                                    {% if i.cover_img %}{% get_media_prefix %}{{ i.cover_img.thumb_s }}{% else %}{% static 'img/album_img.jpg' %}{% endif %}"></a>
+                            <a href="{% url 'edit_album' i.id %}">
+                                <img class="cover_img" src="
+
+                                        {% if i.cover_img %}{% get_media_prefix %}{{ i.cover_img.thumb_s }}{% else %}{% static 'img/album_img.jpg' %}{% endif %}">
+                            </a>
                         </div>
                         <div class="album_info">
                             <div class="album_title"><h6>{{ i.title }}</h6></div>
