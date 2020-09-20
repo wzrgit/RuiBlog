@@ -13,7 +13,7 @@
                         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="update_album_alert"
                              data-delay="2000">
                             <div class="toast-header">
-                                <span class="fa fa-pd fa-info-circle" style="color:green;"></span>
+                                <span class="fa fa-pd fa-check-circle" style="color:green;"></span>
                                 <strong class="mr-auto"> RuiBlog </strong>
                                 <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -105,11 +105,13 @@
 
         <div id="album_photos" class="row container-fluid">
             {% for pic in photos %}
-                <div class="photo_box col-3" photo_id="{{ pic.id }}">
-                    <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="img-fluid w-100 photo_img">
-                    <div id="widget_photo_edit_{{ pic.id }}" class="widget_photo_edit" photo_id="{{ pic.id }}">
-                        <span class="btn btn-sm fa fa-pd fa-window-close del_photo" photo_id="{{ pic.id }}"></span>
-                        <span class="btn btn-sm fa fa-pd fa-edit edit_photo" photo_id="{{ pic.id }}"></span>
+                <div class="col-3" photo_id="{{ pic.id }}">
+                    <div class="photo_box">
+                        <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="photo_img">
+                        <div id="widget_photo_edit_{{ pic.id }}" class="widget_photo_edit" photo_id="{{ pic.id }}">
+                            <span class="btn btn-sm fa fa-pd fa-window-close del_photo" photo_id="{{ pic.id }}"></span>
+                            <span class="btn btn-sm fa fa-pd fa-edit edit_photo" photo_id="{{ pic.id }}"></span>
+                        </div>
                     </div>
                     <div>
                         <h6 class="photo_alias">{{ pic.alias }}</h6>
@@ -267,8 +269,7 @@
 
                     let new_alias = $('#m_edit_img_photo_alias').val();
                     let new_desc = $('#m_edit_img_photo_desc').val();
-                    console.log(new_alias + new_desc)
-                    console.log($('#form_edit_photo').serialize());
+
                     $.ajax({
                         method: 'post',
                         url: url,

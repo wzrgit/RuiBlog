@@ -254,13 +254,12 @@ def update_photo(request):
         alias = request.POST.get('alias')
         desc = request.POST.get('desc')
 
-        print(request.POST)
         if not photo_id or int(photo_id) < 0:
             ret = Common.get_response_content(False)
         else:
-            if alias:
+            if not (alias is None):
                 Photos.objects.filter(id=photo_id).update(alias=alias)
-            if desc:
+            if not (desc is None):
                 Photos.objects.filter(id=photo_id).update(desc=desc)
             ret = Common.get_response_content(True)
 

@@ -1,0 +1,17 @@
+.photo_wrapper {
+    margin-bottom: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
+
+}
+
+.photo_box {
+    height: 225px;
+}
+
+.photo_thumb {
+    object-fit: cover;
+    object-position: 0 0;
+    width: 100%;
+    height: 100%;
+}

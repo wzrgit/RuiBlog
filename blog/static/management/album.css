@@ -42,21 +42,25 @@
     height: 256px;
     width: 256px;
     position: relative;
+    /*margin: 0 3px 1px 3px;*/
 }
 
 .photo_img {
     z-index: 5;
+    object-fit: cover;
+    object-position: 0 0;
+    width: 100%;
+    height: 100%;
 }
 
 .widget_photo_edit {
     position: absolute;
     top: 0px;
-    left: 15px;
+    /*left: 15px;*/
     z-index: 1;
     background: white;
     opacity: 70%;
 }
-
 
 .m_del_pic_img {
     max-height: 105px;
