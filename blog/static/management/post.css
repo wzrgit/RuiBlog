@@ -1,7 +1,33 @@
 #post_table {
     margin-top: 15px;
+    border-bottom: 1px solid #dee2e6;
 }
 
+.table_post_item {
+    height: 65px;
+}
+
+.td_post_item_checkbox {
+    display: none;
+}
+
+.post_title {
+    font-family: -apple-system, "Arial Black", "Blackoak Std";
+    font-weight: bold;
+}
+
+.widget_post_edit {
+    display: none;
+    margin-left: 40px;
+}
+
+.widget_post_edit a, button {
+    padding: 0.1rem 0.15rem;
+}
+
+.fa-white-space {
+    color: rgba(255, 255, 255, 0);
+}
 
 /*
 * Styles of post_edit

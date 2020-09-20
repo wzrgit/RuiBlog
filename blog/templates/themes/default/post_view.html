@@ -5,8 +5,11 @@
 {% block page_import_files %}{% endblock %}
 
 {% block page_content %}
-    <h4>{{ post.title }}</h4>
-    <div>
-    {{ post.content | safe }}
+    <div class="container">
+        <h4>{{ post.title }}</h4>
+        <hr>
+        <div>
+            {{ post.content | safe }}
+        </div>
     </div>
 {% endblock %}

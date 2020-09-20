@@ -1,26 +1,33 @@
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 from blog.views.common import Common
-from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus
+from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus
 from .forms import FormPost
 
 
+@login_required
 def posts(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('admin:login'))
 
-    post_metas = Posts.objects.values('id', 'title', 'subtitle', 'public_time', 'visit_status').order_by('-public_time')
+    post_metas = Posts.objects.values('id', 'title', 'subtitle', 'public_time', 'visit_status',
+                                      'trash_status').order_by('-public_time')
     for p in post_metas:
         categories = CategoryHasPosts.objects.filter(post_id=p['id'])
         p['categories'] = categories.values()
 
+    normal_posts = Posts.objects.filter(trash_status=TrashStatus.Normal)
+    trashed_posts = Posts.objects.filter(trash_status=TrashStatus.Trashed)
+
     counts = {'all': Posts.objects.count(),
-              'publish': Posts.objects.filter(visit_status=VisitStatus.Public).count(),
-              'protected': Posts.objects.filter(visit_status=VisitStatus.Protected).count(),
-              'private': Posts.objects.filter(visit_status=VisitStatus.Protected).count(),
-              'draft': Posts.objects.filter(visit_status=VisitStatus.Draft).count(),
+              'publish': normal_posts.filter(visit_status=VisitStatus.Public).count(),
+              'protected': normal_posts.filter(visit_status=VisitStatus.Protected).count(),
+              'private': normal_posts.filter(visit_status=VisitStatus.Private).count(),
+              'draft': normal_posts.filter(visit_status=VisitStatus.Draft).count(),
+              'deleted': trashed_posts.count(),
               }
 
     content = {'common': Common.get_commons(request),
@@ -30,6 +37,7 @@ def posts(request):
     return render(request, 'management/posts.html', content)
 
 
+@login_required
 def edit_post(request, post_id=-1):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('admin:login') + '?%s=%s' % ('next', request.path))
@@ -112,3 +120,40 @@ def edit_post(request, post_id=-1):
                'form': form}
 
     return render(request, 'management/post_edit.html', content)
+
+
+@login_required
+def get_post_id_from_post(request):
+    """
+    get post_id from request
+    :param request:
+    :return: -1 if error
+    """
+    pid = -1
+    ret = Common.get_response_content(False)
+    if request.method != 'POST':
+        return pid
+
+    post_id = request.POST.get('post_id')
+    if post_id is None or (not post_id.isnumeric()):
+        return pid
+
+    return int(post_id)
+
+
+@login_required
+def remove_post_to_trash(request):
+    post_id = get_post_id_from_post(request)
+    if post_id == -1:
+        return JsonResponse(Common.get_response_content(False), safe=False)
+    Posts.objects.filter(id=post_id).update(trash_status=TrashStatus.Trashed)
+    return JsonResponse(Common.get_response_content(), safe=False)
+
+
+@login_required
+def recover_post_from_trash(request):
+    post_id = get_post_id_from_post(request)
+    if post_id == -1:
+        return JsonResponse(Common.get_response_content(False), safe=False)
+    Posts.objects.filter(id=post_id).update(trash_status=TrashStatus.Normal)
+    return JsonResponse(Common.get_response_content(), safe=False)

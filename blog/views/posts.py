@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus
+from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus
 from .common import Common
 
 
@@ -13,12 +13,14 @@ def post_list(request, curr_page=0, category=-1):
     to_num = from_num + posts_per_page
     if request.user.is_authenticated:
         posts = Posts.objects.values('id', 'title', 'subtitle', 'public_time', 'visit_status', 'cover',
-                                     'content').exclude(visit_status=VisitStatus.Draft).order_by('-public_time')[
+                                     'content').exclude(visit_status=VisitStatus.Draft,
+                                                        trash_status=TrashStatus.Trashed).order_by('-public_time')[
                 from_num: to_num]
     else:
         posts = Posts.objects.values('id', 'title', 'subtitle', 'public_time', 'visit_status', 'cover',
-                                     'content').filter(
-            visit_status__in=(VisitStatus.Public, VisitStatus.Protected)).order_by('-public_time')[from_num: to_num]
+                                     'content').filter(visit_status__in=[VisitStatus.Public],
+                                                       trash_status__in=[TrashStatus.Normal]).order_by('-public_time')[
+                from_num: to_num]
 
     for p in posts:
         if request.user.is_authenticated:
@@ -53,8 +55,8 @@ def post_view(request, post_id):
     if not request.user.is_authenticated:
         if pt.visit_status in [VisitStatus.Private, VisitStatus.Draft]:
             return HttpResponseRedirect(reverse('admin:login'))
-        if pt.visit_status == VisitStatus.Protected:
-            pass
+        elif pt.visit_status == VisitStatus.Protected:  # TODO check password
+            return HttpResponseRedirect(reverse('admin:login'))
 
     content = {'common': common,
                'post': pt}

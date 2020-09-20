@@ -5,11 +5,12 @@
 
 {% block load_import_file %}
     <link href="{% static 'management/post.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'management/common.js' %}"></script>
 {% endblock %}
 
 {% block title_right %}
     <a class="btn btn-sm btn-info mr-2" href="{% url 'create_post' %}">CreatePost</a>
-{#    <button class="btn btn-sm btn-info mr-2">CreateDraft</button>#}
+    {#    <button class="btn btn-sm btn-info mr-2">CreateDraft</button>#}
 {% endblock %}
 
 {% block main_content %}
@@ -19,14 +20,15 @@
             <span class="fa-pd"><a href="#">Published </a>({{ counts.publish }})</span>|
             <span class="fa-pd"><a href="#">Protected </a>({{ counts.protected }})</span>|
             <span class="fa-pd"><a href="#">Private </a>({{ counts.private }})</span>|
-            <span class="fa-pd"><a href="#">Draft </a>({{ counts.draft }})</span>
+            <span class="fa-pd"><a href="#">Draft </a>({{ counts.draft }})</span>|
+            <span class="fa-pd"><a href="#">Trash </a>({{ counts.deleted }})</span>
         </div>
 
         <div class="row w-100" id="post_table">
             <table class="table table-striped" style="table-layout: fixed;">
                 <thead class="thead-dark">
                 <tr>
-                    <th style="width: 32px;">
+                    <th style="width: 32px;" class="td_post_item_checkbox">
                         <input type="checkbox">
                     </th>
                     <th class="text-nowrap overflow-hidden align-left" style="width: 70%">
@@ -45,66 +47,101 @@
                 <tbody>
 
                 {% for post in post_metas %}
-                    <tr>
-                    <td><input type="checkbox"></td>
-                    <td class="text-nowrap overflow-hidden">
-                        <a href="#">
-                            {{ post.title }} {% if post.subtitle %} / {{ post.subtitle }} {% endif %}
-                        </a>
-                    </td>
-                    <td scope="col">
-                        Travel
-                    </td>
-                    <td scope="col">
-                        {{ post.public_time }}
-                    </td>
-                </tr>
-                {% endfor %}
+                    <tr class="table_post_item" post_id="{{ post.id }}">
+                        <td class="td_post_item_checkbox"><input type="checkbox"></td>
+                        <td class="text-nowrap overflow-hidden">
+                            {% if post.trash_status == 1 %}
+                                <span class="fa-pd fa fa-trash-alt text-warning"></span>
+                            {% else %}
+                                <span class="fa-pd fa fa-white-space fa-file-alt"></span>
+                            {% endif %}
+                            {% if post.visit_status == 0 %}  {# draft #}
+                                <span class="fa-pd fa fa-file-alt text-secondary"></span>
+                            {% elif post.visit_status == 1 %} {# public #}
+                                <span class="fa-pd fa fa-file-powerpoint text-success"></span>
+                            {% elif post.visit_status == 2 %} {# protected #}
+                                <span class="fa-pd fa fa-lock-open text-primary"></span>
+                            {% elif post.visit_status == 3 %} {# private #}
+                                <span class="fa-pd fa fa-lock text-warning"></span>
+                            {% endif %}
 
+                            <a href="#" class="post_title">
+                                {% if post.trash_status == 1 %}
+                                    <s class="text-secondary">{{ post.title }}
+                                        {% if post.subtitle %} | {{ post.subtitle }} {% endif %}</s>
+                                {% else %}
+                                    {{ post.title }}
+                                    {% if post.subtitle %} | {{ post.subtitle }} {% endif %}
+                                {% endif %}
+                            </a>
+                            <div class="widget_post_edit">
+                                {% if post.trash_status == 0 %}
+                                    <span><a class="btn btn-sm btn-link btn_post_edit"
+                                             href="{% url 'edit_post' post_id=post.id %}"
+                                             target="_blank">edit</a></span>
+                                    |<span><button type="button" class="btn btn-sm btn-link text-danger btn_trash_post"
+                                                   href="#" trash="{{ post.trash_status }}">delete</button></span>
+                                    |<span><a class="btn btn-sm btn-link" href="{% url 'post_view' post_id=post.id %}"
+                                              target="_blank">view</a></span>
+                                {% else %}
+                                    <span><a class="btn btn-sm btn-link btn_post_edit"
+                                             href="{% url 'edit_post' post_id=post.id %}"
+                                             target="_blank">edit</a></span>
+                                    |<span><button type="button" class="btn btn-sm btn-link text-info btn_trash_post"
+                                                   href="#" trash="{{ post.trash_status }}">recover</button></span>
+                                {% endif %}
+
+
+                            </div>
+                        </td>
+                        <td scope="col">
+                            Travel
+                        </td>
+                        <td scope="col">
+                            {{ post.public_time|date:'Y/m/d H:i' }}
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
-
-{#        <div class="row w-100" id="post_list">#}
-{#            <ul class="list-group w-100">#}
-{#                <div class=""></div>#}
-{#                <li class="list-group-item text-nowrap align-left">#}
-{#                    <div class="row">#}
-{#                        <input type="checkbox">#}
-{#                        <div class="col-4 overflow-hidden">#}
-{#                            <a href="#">the title of my post, test for a long text, too see when hide or auto show</a>#}
-{#                        </div>#}
-{#                        <div class="col-2">#}
-{#                            <a href="#">The_category</a>#}
-{#                        </div>#}
-{#                        <div class="col-3">2020-07-20</div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li class="list-group-item text-nowrap align-left">#}
-{#                    <div class="row">#}
-{#                        <input type="checkbox">#}
-{#                        <div class="col-4">#}
-{#                            <a href="#">the title of my post</a>#}
-{#                        </div>#}
-{#                        <div class="col-2">#}
-{#                            <a href="#">The_category</a>#}
-{#                        </div>#}
-{#                        <div class="col-2">2020-07-20</div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li class="list-group-item text-nowrap  align-left">#}
-{#                    <div class="row">#}
-{#                        <input type="checkbox">#}
-{#                        <div class="col-4">#}
-{#                            <a href="#">the title of my post</a>#}
-{#                        </div>#}
-{#                        <div class="col-2">#}
-{#                            <a href="#">The_category</a>#}
-{#                        </div>#}
-{#                        <div class="col-3">2020-07-20</div>#}
-{#                    </div>#}
-{#                </li>#}
-{#            </ul>#}
-        </div>
     </div>
+
+    <script>
+        $(window).ready(function () {
+            $.ajaxSetup({
+                headers: {"X-CSRFToken": getCookie("csrftoken")}
+            });
+
+            $('.table_post_item').hover(function () {
+                    $(this).find('.widget_post_edit').show();
+                },
+                function () {
+                    $('.widget_post_edit').hide();
+                }
+            );
+
+            $('.btn_trash_post').click(function () {
+                let url = $(this).attr('trash') == 0 ? "{% url 'remove_post_to_trash' %}" : "{% url 'recover_post_from_trash' %}";
+                let pid = $(this).parents('.table_post_item').attr('post_id');
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {'post_id': pid},
+                    success: function (data, status) {
+                        console.log(data);
+                        if (data['status'] == 'success') {
+                            location.reload()
+                        } else {
+
+                        }
+                    },
+                    error: function (msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+
+        });
+    </script>
 {% endblock %}
