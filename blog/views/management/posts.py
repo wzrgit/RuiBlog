@@ -157,3 +157,17 @@ def recover_post_from_trash(request):
         return JsonResponse(Common.get_response_content(False), safe=False)
     Posts.objects.filter(id=post_id).update(trash_status=TrashStatus.Normal)
     return JsonResponse(Common.get_response_content(), safe=False)
+
+
+@login_required
+def destroy_post(request):
+    post_id = get_post_id_from_post(request)
+    if post_id == -1:
+        return JsonResponse(Common.get_response_content(False), safe=False)
+
+    post = Posts.objects.filter(id=post_id).values()
+    if len(post) <= 0 or post[0]['trash_status'] != TrashStatus.Trashed:
+        pass  # TODO log or waning
+
+    Posts.objects.filter(id=post_id).delete()
+    return JsonResponse(Common.get_response_content(), safe=False)

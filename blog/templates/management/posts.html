@@ -17,11 +17,16 @@
     <div class="container">
         <div class="row">
             <span class="fa-pd"><a href="#">All </a>({{ counts.all }})</span>|
-            <span class="fa-pd"><a href="#">Published </a>({{ counts.publish }})</span>|
-            <span class="fa-pd"><a href="#">Protected </a>({{ counts.protected }})</span>|
-            <span class="fa-pd"><a href="#">Private </a>({{ counts.private }})</span>|
-            <span class="fa-pd"><a href="#">Draft </a>({{ counts.draft }})</span>|
-            <span class="fa-pd"><a href="#">Trash </a>({{ counts.deleted }})</span>
+            <span class="fa-pd"><i class="fa-pd fa fa-file-powerpoint text-success"></i><a
+                    href="#">Published </a>({{ counts.publish }})</span>|
+            <span class="fa-pd"><i class="fa-pd fa fa-lock-open text-primary"></i><a
+                    href="#">Protected </a>({{ counts.protected }})</span>|
+            <span class="fa-pd"><i class="fa-pd fa fa-lock text-warning"></i><a
+                    href="#">Private </a>({{ counts.private }})</span>|
+            <span class="fa-pd"><i class="fa-pd fa fa-file-alt text-secondary"></i><a
+                    href="#">Draft </a>({{ counts.draft }})</span>|
+            <span class="fa-pd"><i class="fa-pd fa fa-trash-alt text-warning"></i><a
+                    href="#">Trash </a>({{ counts.deleted }})</span>
         </div>
 
         <div class="row w-100" id="post_table">
@@ -89,9 +94,10 @@
                                              target="_blank">edit</a></span>
                                     |<span><button type="button" class="btn btn-sm btn-link text-info btn_trash_post"
                                                    href="#" trash="{{ post.trash_status }}">recover</button></span>
+                                    |<span><button type="button"
+                                                   class="btn btn-sm btn-link text-danger btn_destroy_post"
+                                                   href="#">destroy</button></span>
                                 {% endif %}
-
-
                             </div>
                         </td>
                         <td scope="col">
@@ -104,6 +110,26 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    {# remove or delete #}
+    <div class="fade modal" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false"
+         id="remove_or_delete_post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal" id="m_do_cancel">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger" id="m_do_sure">Sure</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -122,25 +148,81 @@
             );
 
             $('.btn_trash_post').click(function () {
-                let url = $(this).attr('trash') == 0 ? "{% url 'remove_post_to_trash' %}" : "{% url 'recover_post_from_trash' %}";
-                let pid = $(this).parents('.table_post_item').attr('post_id');
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: {'post_id': pid},
-                    success: function (data, status) {
-                        console.log(data);
-                        if (data['status'] == 'success') {
-                            location.reload()
-                        } else {
+                if ($(this).attr('trash') == 0) {
+                    let post_name = $(this).parents('.table_post_item').find('.post_title').text();
+                    remove_or_delete_post_dialog("Trash :",
+                        `Are you sure to remove <br><b>[${post_name}]</b><br>to trash ? `,
+                        function () {
+                        },
+                        do_remove_or_recover.bind($(this)));
+                } else {
+                    do_remove_or_recover.bind($(this))();
+                }
 
+                function do_remove_or_recover() {
+                    let url = $(this).attr('trash') == 0 ? "{% url 'remove_post_to_trash' %}" : "{% url 'recover_post_from_trash' %}";
+                    let pid = $(this).parents('.table_post_item').attr('post_id');
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: {'post_id': pid},
+                        success: function (data, status) {
+                            if (data['status'] == 'success') {
+                                location.reload()
+                            } else {
+                                console.log(data + ' , ' + status);
+                            }
+                        },
+                        error: function (msg) {
+                            console.log(msg);
                         }
-                    },
-                    error: function (msg) {
-                        console.log(msg);
-                    }
-                });
+                    });
+                }
             });
+
+            $('.btn_destroy_post').click(function () {
+                let post_name = $(this).parents('.table_post_item').find('.post_title').text();
+                remove_or_delete_post_dialog("Destroy! ",
+                    `Are you sure to <b class='text-danger'>DESTROY</b> post <br><b>[${post_name}]</b> ? `,
+                    function () {
+                    },
+                    do_destroy_post.bind($(this)));
+
+                function do_destroy_post() {
+                    let url = "{% url 'delete_post' %}";
+                    let pid = $(this).parents('.table_post_item').attr('post_id');
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: {'post_id': pid},
+                        success: function (data, status) {
+                            if (data['status'] == 'success') {
+                                location.reload()
+                            } else {
+                                console.log(data + ' , ' + status);
+                            }
+                        },
+                        error: function (msg) {
+                            console.log(msg);
+                        }
+                    });
+                }
+
+            });
+
+            function remove_or_delete_post_dialog(title, body, fun_cancel, fun_ok) {
+                $('#remove_or_delete_post').find('.modal-title').text(title);
+                $('#remove_or_delete_post').find('.modal-body').html(body);
+                $('#remove_or_delete_post').modal('toggle');
+
+                $('#m_do_cancel').click(function () {
+                    fun_cancel();
+                });
+                $('#m_do_sure').click(function () {
+                    $('#remove_or_delete_post').modal('hide');
+                    fun_ok();
+                });
+            };
 
         });
     </script>

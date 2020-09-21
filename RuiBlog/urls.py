@@ -47,6 +47,7 @@ urlpatterns = [
     re_path(r'^management/post/edit/(?P<post_id>(\-)?\d+)/$', mgr_posts.edit_post, name='edit_post'),
     path('management/posts/remove_to_trash', mgr_posts.remove_post_to_trash, name='remove_post_to_trash'),
     path('management/posts/recover_from_trash', mgr_posts.recover_post_from_trash, name='recover_post_from_trash'),
+    path('management/posts/delete', mgr_posts.destroy_post, name='delete_post'),
     path('management/settings/', mgr_settings.settings),
     path('management/albums/', mgr_albums.albums),
     path('management/create_album/', mgr_albums.create_album, name='create_album'),
