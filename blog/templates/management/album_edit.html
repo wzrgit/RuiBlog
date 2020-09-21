@@ -105,7 +105,7 @@
 
         <div id="album_photos" class="row container-fluid">
             {% for pic in photos %}
-                <div class="col-3" photo_id="{{ pic.id }}">
+                <div class="col-3 photo_wrapper" photo_id="{{ pic.id }}">
                     <div class="photo_box" photo_id="{{ pic.id }}">
                         <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="photo_img">
                         <div id="widget_photo_edit_{{ pic.id }}" class="widget_photo_edit" photo_id="{{ pic.id }}">
@@ -256,8 +256,8 @@
                 let pid = $(this).attr('photo_id');
                 let url = "{% url 'update_image' %}";
 
-                var ctl_alias = $(this).parent().parent().find("h6[class='photo_alias']");
-                var ctl_desc = $(this).parent().parent().find("div[class='photo_desc']");
+                var ctl_alias = $(this).parents('.photo_wrapper').find("h6[class='photo_alias']");
+                var ctl_desc = $(this).parents('.photo_wrapper').find("div[class='photo_desc']");
 
                 let alias = ctl_alias.text();
                 let desc = ctl_desc.text();
@@ -297,9 +297,8 @@
                     method: 'POST',
                     data: {"photo_id": pid, "album_id":{{ album_meta_form.f_id.value }}},
                     dataType: 'json',
-                    success: function (data, status) {
+                    success: function (data, status) {// TODO notify
                         if (data['status'] == 'success') {
-                            // TODO set photo as cover
                             $('.as_cover').removeClass('text-success');
                             $('.photo_box[photo_id='+pid+']').find('.as_cover').addClass('text-success');
                         } else {

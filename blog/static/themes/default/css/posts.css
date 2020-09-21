@@ -1,3 +1,20 @@
 body{
     font-family: "PingFang TC", "Microsoft YaHei", Arial;
 }
+
+.content_page {
+    margin-top: 0.5rem;
+}
+
+.posts_container {
+    margin-top: 0.5rem;
+}
+
+.post_wrapper {
+    margin-bottom: 1rem;
+}
+
+.post_pub_time {
+    color: #8e908c;
+    font-size: small;
+}
