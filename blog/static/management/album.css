@@ -49,9 +49,8 @@
 
 .photo_box {
     height: 256px;
-    width: 256px;
+    /*width: 256px;*/
     position: relative;
-    /*margin: 0 3px 1px 3px;*/
 }
 
 .photo_img {

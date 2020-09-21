@@ -68,6 +68,9 @@ def edit_album(request, album_id):
         except Album.DoesNotExist:
             return Common.redirect_to_404(request)
 
+        album_dict = vars(album)
+        view_album.check_cover_img(album_dict)
+
         default_data = {'f_id': album.id,
                         'f_title': album.title,
                         'f_desc': album.desc,
@@ -90,7 +93,8 @@ def edit_album(request, album_id):
                    'album_meta_form': form,
                    'upload_photo_form': form_photo,
                    'photos': photos,
-                   'album_id': album_id
+                   'album_id': album_id,
+                   'album': album_dict,
                    }
         return render(request, 'management/album_edit.html', content)
 
@@ -294,3 +298,23 @@ def delete_photo(request):
         ret = Common.get_response_content()
 
     return JsonResponse(ret, safe=False)
+
+
+def set_photo_as_album_cover(request):
+    """
+    set photo as cover of the album
+    :param request:
+    :return:
+    """
+    if request.method != 'POST':
+        ret = Common.get_response_content(False)
+
+    photo_id = request.POST.get('photo_id')
+    album_id = request.POST.get('album_id')
+    if (not (photo_id or albums)) or (not photo_id.isnumeric()) or (not album_id.isnumeric()):
+        return JsonResponse(Common.get_response_content(False), safe=False)
+
+    # TODO check if the photo in the album
+
+    Album.objects.filter(id=int(album_id)).update(cover_img=int(photo_id))
+    return JsonResponse(Common.get_response_content(), safe=False)

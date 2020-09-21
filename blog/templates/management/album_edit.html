@@ -106,11 +106,17 @@
         <div id="album_photos" class="row container-fluid">
             {% for pic in photos %}
                 <div class="col-3" photo_id="{{ pic.id }}">
-                    <div class="photo_box">
+                    <div class="photo_box" photo_id="{{ pic.id }}">
                         <img src="{% get_media_prefix %}/{{ pic.thumb_s }}" class="photo_img">
                         <div id="widget_photo_edit_{{ pic.id }}" class="widget_photo_edit" photo_id="{{ pic.id }}">
-                            <span class="btn btn-sm fa fa-pd fa-window-close del_photo text-danger" photo_id="{{ pic.id }}"></span>
+                            <span class="btn btn-sm fa fa-pd fa-window-close del_photo text-danger"
+                                  photo_id="{{ pic.id }}"></span>
                             <span class="btn btn-sm fa fa-pd fa-edit edit_photo" photo_id="{{ pic.id }}"></span>
+                            {% if pic.id == album.cover_img.id %}
+                                <span class="btn btn-sm fa fa-pd fa-image as_cover text-success"></span>
+                            {% else %}
+                                <span class="btn btn-sm fa fa-pd fa-image as_cover"></span>
+                            {% endif %}
                         </div>
                     </div>
                     <div>
@@ -181,8 +187,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script>
         $(document).ready(function () {
@@ -284,6 +288,29 @@
                     });
                 });
             });
+
+            $('.as_cover').click(function () {
+                let url = "{% url 'set_album_cover' %}";
+                let pid = $(this).parents('.photo_box').attr('photo_id');
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {"photo_id": pid, "album_id":{{ album_meta_form.f_id.value }}},
+                    dataType: 'json',
+                    success: function (data, status) {
+                        if (data['status'] == 'success') {
+                            // TODO set photo as cover
+                            $('.as_cover').removeClass('text-success');
+                            $('.photo_box[photo_id='+pid+']').find('.as_cover').addClass('text-success');
+                        } else {
+                            console.log(data + status);
+                        }
+                    },
+                    error: function (msg) {
+                        console.log(msg);
+                    }
+                });
+            })
         })
     </script>
 {% endblock %}

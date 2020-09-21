@@ -52,6 +52,7 @@ urlpatterns = [
     path('management/albums/', mgr_albums.albums),
     path('management/create_album/', mgr_albums.create_album, name='create_album'),
     path('management/albums/edit/<int:album_id>', mgr_albums.edit_album, name='edit_album'),
+    path('management/albums/edit/cover/', mgr_albums.set_photo_as_album_cover, name='set_album_cover'),
 
     # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),

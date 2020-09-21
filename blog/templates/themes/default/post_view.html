@@ -1,15 +1,23 @@
 {% extends "themes/default/base_template.html" %}
+{% load static %}
 
 {% block page_title %}{% endblock %}
 
-{% block page_import_files %}{% endblock %}
+{% block page_import_files %}
+    <link rel="stylesheet" href="{% static 'themes/default/css/post_view.css' %}">
+{% endblock %}
 
 {% block page_content %}
     <div class="container">
-        <h4>{{ post.title }}</h4>
-        <hr>
-        <div>
-            {{ post.content | safe }}
+        <div class="content_main">
+            <h4 class="post_title text-center">{{ post.title }}</h4>
+            {% if post.subtitle %}
+            <h6 class="post_sub_title text-center">{{ post.subtitle }}</h6>
+            {% endif %}
+            <hr>
+            <div>
+                {{ post.content | safe }}
+            </div>
         </div>
     </div>
 {% endblock %}
