@@ -1,4 +1,4 @@
-body{
+body {
     font-family: "PingFang TC", "Microsoft YaHei", Arial;
 }
 
@@ -10,11 +10,102 @@ body{
     margin-top: 0.5rem;
 }
 
+.post_wrapper:before{
+    content: '';
+    display: block;
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    background: #eaeaea;
+    top: -110px;
+    z-index: 0;
+}
+
+.post_wrapper:before:first-child {
+    top:-80px;
+}
+
 .post_wrapper {
-    margin-bottom: 1rem;
+    position: relative;
+    width: 1200px;
+    margin: 100px auto 0;
+}
+
+.post_wrapper:nth-child(odd) {
+    text-align: left;
+}
+
+.post_wrapper:nth-child(even) {
+    text-align: right;
+}
+
+.post_cover {
+    display: inline-block;
+    width: 680px;
+    height: 445px;
+    overflow: hidden;
+    position: relative;
+    z-index: 3;
+}
+
+.post_cover img {
+    object-fit: cover;
+    object-position: 0 0;
+    width: 100%;
+}
+
+.post_meta {
+    position: absolute;
+    top: 20px;
+    width: 498px;
+    height: 398px;
+    text-align: left;
+    padding-left: 80px;
+    padding-right: 80px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #eaeaea;
+
+    font-weight: normal;
+    list-style: none;
+}
+
+.post_wrapper:nth-child(odd) .post_meta {
+    left: 660px;
+}
+
+.post_wrapper:nth-child(even) .post_meta {
+    right: 660px;
+}
+
+.meta_top_fix {
+    margin-top: 80px;
+}
+
+.post_meta h5 h6 {
+    line-height: 1.1;
+}
+
+.post_title > a {
+    color: #333;
+}
+
+.post_sub_title {
+    margin-left: 2rem;
 }
 
 .post_pub_time {
     color: #8e908c;
-    font-size: small;
+    font-size: 13px;
+}
+
+.post_thumb {
+    color: #999;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.post_thumb p {
+    margin-left: 0.5rem;
 }
