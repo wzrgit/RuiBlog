@@ -194,6 +194,8 @@
                 headers: {"X-CSRFToken": getCookie("csrftoken")}
             });
 
+            $('.link_albums').addClass('text-primary');
+
             $("#btn_album_meta_update").click(function (e) {
                 e.preventDefault();
                 // TODO check fields

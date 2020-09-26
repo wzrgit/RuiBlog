@@ -10,7 +10,11 @@ body {
     margin-top: 0.5rem;
 }
 
-.post_wrapper:before{
+.post_categories {
+    margin: 10px auto 10px;
+}
+
+.post_wrapper:before {
     content: '';
     display: block;
     width: 1px;
@@ -23,7 +27,7 @@ body {
 }
 
 .post_wrapper:before:first-child {
-    top:-80px;
+    top: -80px;
 }
 
 .post_wrapper {
@@ -83,8 +87,12 @@ body {
     margin-top: 80px;
 }
 
-.post_meta h5 h6 {
+.post_title, .post_sub_title {
     line-height: 1.1;
+}
+
+.post_title {
+    font-size: 1.85rem;
 }
 
 .post_title > a {

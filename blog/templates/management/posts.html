@@ -139,6 +139,8 @@
                 headers: {"X-CSRFToken": getCookie("csrftoken")}
             });
 
+            $('.link_post').addClass('text-primary');
+
             $('.table_post_item').hover(function () {
                     $(this).find('.widget_post_edit').show();
                 },

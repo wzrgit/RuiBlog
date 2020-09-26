@@ -3,6 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from blog.models import Album, Photos, VisitStatus
 import RuiBlog.settings as blog_settings
 from .common import Common
+import json
 
 
 def get_hard_album_path(album_id):
@@ -63,6 +64,8 @@ def album_view(request, album_id, curr_page=0):
     photos = Photos.objects.filter(album_id=album_id).order_by('-create_time').values()
     for p in photos:
         photo_make_path(p)
+        if p['exif']:
+            p['exif'] = json.loads(p['exif'])
 
     content = {'common': common,
                'photos': photos,

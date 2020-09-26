@@ -12,13 +12,19 @@
                         <span class="fas fa-calendar-alt fa-pd"></span><span>最近文章</span>
                         <ul class="text-nowrap overflow-hidden">
                             {% for post in recent_posts %}
-                                <li><a href="#" target="_blank">{{ post.public_time }} / {{ post.title }}{% if post.subtitle %} / {{ post.subtitle }}{% endif %}</a></li>
+                                <li><a href="#" target="_blank">{{ post.public_time }} /
+                                    {{ post.title }}{% if post.subtitle %} / {{ post.subtitle }}{% endif %}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <script>
+        $(window).ready(function () {
+            $('.link_dash').addClass('text-primary');
+        })
+    </script>
 {% endblock %}

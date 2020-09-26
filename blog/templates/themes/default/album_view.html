@@ -3,6 +3,14 @@
 
 {% block page_import_files %}
     <link href="{% static '/themes/default/css/album_view.css' %}" rel="stylesheet">
+    <!-- light box2
+    <link href="{% static '/libs/lightbox2-2.11.3/css/lightbox.min.css' %}" rel="stylesheet">
+    <script src="{% static '/libs/lightbox2-2.11.3/js/lightbox-plus-jquery.min.js' %}"></script>
+     -->
+
+    <!-- ek light box -->
+    <link href="{% static '/libs/lightbox-5.3.0/ekko-lightbox.css' %}" rel="stylesheet">
+    <script src="{% static '/libs/lightbox-5.3.0/ekko-lightbox.min.js' %}"></script>
 {% endblock %}
 
 {% block page_title %}
@@ -16,12 +24,23 @@
         </div>
         <hr>
         <div id="album_photos">
-            <div class="container row">
+            <div class="row">
                 {% for p in photos %}
                     <div class="col-3">
                         <div class="photo_wrapper">
                             <div class="photo_box">
-                                <a href="#">
+                                <a href="{% get_media_prefix %}{{ p.path }}"
+                                   data-toggle="lightbox"
+                                   data-gallery="{{ album.id }}"
+                                   data-title="{{ p.alias }}"
+                                   data-footer="<div>
+                                   <div class='photo_desc'>[{{ forloop.counter }}/{{ photos|length }}] {% if p.desc %} <span class='img_desc'> {{ p.desc }} </span>{% endif %}</div>
+                                   {% if album.show_exif and p.exif and p.exif.Model %}<div>
+                                   <var>Camera</var>[{{ p.exif.Model }}]{% if p.exif.LensModel %} <var>Len</var>[{{ p.exif.LensModel }}]{% endif %}
+                                   [{{ p.exif.FocalLength }}<var>mm</var> <var>iso</var>{{ p.exif.ISOSpeedRatings }}, <var>f/</var>{{ p.exif.FNumber }}, {{ p.exif.ExposureTime }}<var>s</var>]
+                                   </div>
+                                   {% endif %}
+                                   </div>">
                                     <img src="{% get_media_prefix %}{{ p.thumb_s }}" class="photo_thumb">
                                 </a>
                             </div>
@@ -34,4 +53,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
+
 {% endblock %}

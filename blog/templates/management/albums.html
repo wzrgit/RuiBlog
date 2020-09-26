@@ -68,7 +68,7 @@
     </div>
     <script>
         $(document).ready(function () {
-
+            $('.link_albums').addClass('text-primary');
             {#  submit_create_album  #}
             $('#submit_create_album').click(function (e) {
                 e.preventDefault();
@@ -108,6 +108,7 @@
                         <div class="album_cover">
                             <a href="{% url 'edit_album' i.id %}">
                                 <img class="cover_img" src="
+
 
                                         {% if i.cover_img %}{% get_media_prefix %}{{ i.cover_img.thumb_s }}{% else %}{% static 'img/album_img.jpg' %}{% endif %}">
                             </a>

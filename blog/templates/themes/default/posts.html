@@ -10,13 +10,13 @@
 
 
 {% block page_content %}
-    <div class="container-fluid content_page">
-        <div class="post_categories">
+    <div class="content_page">
+        <div class="container post_categories">
             {% for cat in categories %}
                 <span cat_id={{ cat.id }}>{{ cat.name }}</span>
             {% endfor %}
         </div>
-        <div class="posts_container">
+        <div class="container-fluid  posts_container">
             {% for post in posts %}
                 <div class="post_wrapper">
                     <div class="post_cover">

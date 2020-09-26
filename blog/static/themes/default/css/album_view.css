@@ -19,3 +19,30 @@
     width: 100%;
     height: 100%;
 }
+
+
+/**  TO ekko-lightbox
+*/
+
+.ekko-lightbox .modal-dialog {
+    margin: 0.15rem  auto;
+}
+
+.ekko-lightbox h4 {
+    font-size: 1.0rem !important;
+}
+
+.ekko-lightbox .modal-header {
+    padding: 0.5rem 1rem;
+}
+
+
+.ekko-lightbox .modal-body {
+    padding: 0.25rem;
+}
+
+.ekko-lightbox .modal-footer {
+    padding: 0.35rem 0.75rem;
+    justify-content: flex-start;
+    font-size: x-small;
+}
