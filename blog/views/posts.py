@@ -1,8 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus
+from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus, PostCovers
+import RuiBlog.settings as blog_settings
 from .common import Common
+
+
+def get_post_cover_hard_path(year):
+    return blog_settings.MEDIA_ROOT + blog_settings.POST_COVER_PREFIX + year + '/'
+
+
+def get_post_cover_soft_path(year):
+    return blog_settings.POST_COVER_PREFIX + year + '/'
+
+
+def check_cover(cover):
+    tm = cover['creation_time']
+    year = tm.strftime('%Y')
+    cover['path'] = get_post_cover_soft_path(year) + cover['name']
+    cover['thumb_m'] = get_post_cover_soft_path(year) + 'thumb_m/' + cover['name']
+    cover['thumb_s'] = get_post_cover_soft_path(year) + 'thumb_s/' + cover['name']
 
 
 def post_list(request, curr_page=0, category=-1):
@@ -23,14 +40,18 @@ def post_list(request, curr_page=0, category=-1):
                 from_num: to_num]
 
     for p in posts:
+        if len(p['content']) > 300:
+            p['content'] = p['content'][:300]
+
+        if len(p['cover']) > 0:
+            cover_img = PostCovers.objects.filter(id=int(p['cover'])).values()[0]
+            check_cover(cover_img)
+            p['cover_img'] = cover_img
+
         if request.user.is_authenticated:
-            if len(p['content']) > 300:
-                p['content'] = p['content'][:300]
+            pass
         else:
-            if p['visit_status'] == VisitStatus.Public:
-                if len(p['content']) > 300:
-                    p['content'] = p['content'][:300]
-            else:
+            if p['visit_status'] != VisitStatus.Public:
                 p['content'] = ''
 
     categories = PostCategory.objects.all().values()

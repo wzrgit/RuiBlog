@@ -20,6 +20,21 @@
     height: 100%;
 }
 
+/**/
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.photo_box {
+    border: 1px solid #999;
+    /*max-width: 640px;*/
+}
+
+
+/**/
+
 
 /**  TO ekko-lightbox
 */

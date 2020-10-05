@@ -137,6 +137,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
 PHOTO_PATH_PREFIX = 'res/pic/'
+POST_COVER_PREFIX = 'res/pic/post_covers/'
 
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"

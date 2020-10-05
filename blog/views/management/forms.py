@@ -29,6 +29,7 @@ class FormPost(RuiBlogForm):
     f_id = forms.IntegerField(required=True, initial=-1)
     f_title = forms.CharField(label=_('post_title'), max_length=255, required=True)
     f_subtitle = forms.CharField(label=gettext('post_sub_title'), max_length=255, required=False)
+    f_cover = forms.CharField(label=gettext('post_cover_img'), max_length=512, required=False)
     f_create_tm = forms.DateTimeField(label=gettext('post_create_time'))
     f_publish_tm = forms.DateTimeField(label=gettext('post_publish_time'))
     f_update_tm = forms.DateTimeField(label=gettext('post_update_time'))

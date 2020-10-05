@@ -65,6 +65,13 @@ class CategoryHasPosts(models.Model):
     post = models.ForeignKey(Posts, on_delete=models.CASCADE)
 
 
+class PostCovers(models.Model):
+    name = models.CharField(max_length=255)
+    alias = models.CharField(max_length=255)
+    alert = models.CharField(max_length=255, blank=True)
+    creation_time = models.DateTimeField()
+
+
 class Album(models.Model):
     VISIT_STATUS = (
         (VisitStatus.Public, 'public'),

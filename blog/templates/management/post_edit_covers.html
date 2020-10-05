@@ -1,0 +1,21 @@
+{% load static %}
+<div class="row">
+    <div class="col-8">
+        <div class="row">
+            {% for c in covers %}
+                <div class="col-3">
+                    <div class="post_covers_box">
+                        <img src="{% get_media_prefix %}{{ c.thumb_s }}" class="post_covers_img" cover_id="{{ c.id }}">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-4 cover_selected_preview_panel">
+        <div>
+            <img id="cover_img_selected_preview"></div>
+        <div class="mt-3">
+            <button class="btn btm-sm btn-primary" id="embed_post_cover">Embed</button>
+        </div>
+    </div>
+</div>

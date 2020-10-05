@@ -4,8 +4,11 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from blog.views.common import Common
-from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus
+from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus, PostCovers
+from blog.views.management import albums
 from .forms import FormPost
+import datetime
+import blog.views.posts as posts_view
 
 
 @login_required
@@ -14,10 +17,14 @@ def posts(request):
         return HttpResponseRedirect(reverse('admin:login'))
 
     post_metas = Posts.objects.values('id', 'title', 'subtitle', 'public_time', 'visit_status',
-                                      'trash_status').order_by('-public_time')
+                                      'trash_status', 'cover').order_by('-public_time')
     for p in post_metas:
         categories = CategoryHasPosts.objects.filter(post_id=p['id'])
         p['categories'] = categories.values()
+        if len(p['cover']) > 0:
+            cover = PostCovers.objects.filter(id=int(cover)).values[0]
+            posts_view.check_cover(cover)
+            p['cover'] = cover
 
     normal_posts = Posts.objects.filter(trash_status=TrashStatus.Normal)
     trashed_posts = Posts.objects.filter(trash_status=TrashStatus.Trashed)
@@ -42,6 +49,7 @@ def edit_post(request, post_id=-1):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('admin:login') + '?%s=%s' % ('next', request.path))
 
+    cover_id = None
     if request.method == 'GET':
         form = FormPost()
         form.update_placeholder(['f_title', 'f_subtitle'])
@@ -55,6 +63,7 @@ def edit_post(request, post_id=-1):
             pts = Posts.objects.filter(id=post_id)
             if len(pts) > 0:
                 post = pts[0]
+                cover_id = post.cover
                 default_data = {'f_id': post.id,
                                 'f_title': post.title,
                                 'f_subtitle': post.subtitle,
@@ -65,12 +74,13 @@ def edit_post(request, post_id=-1):
                                 'f_visit_status': post.visit_status,
                                 'f_comment_status': post.comment_status,
                                 'f_pwd': post.password,
+                                'f_cover': post.cover,
                                 }
                 form = FormPost(default_data)
             else:
                 raise ValueError
 
-        for f in ['f_id', 'f_create_tm', 'f_update_tm']:
+        for f in ['f_id', 'f_create_tm', 'f_update_tm', 'f_cover']:
             form.fields[f].widget.attrs.update({'readonly': 'readonly'})
             form.fields[f].widget.attrs['class'] += ' d-none'
 
@@ -90,6 +100,7 @@ def edit_post(request, post_id=-1):
             f_pwd = form.cleaned_data['f_pwd']
             f_can_comment = form.cleaned_data['f_comment_status']
             f_content = form.cleaned_data['f_content']
+            f_cover = form.cleaned_data['f_cover']
 
             if f_id == -1:
                 post = Posts.objects.create(title=f_title,
@@ -101,6 +112,7 @@ def edit_post(request, post_id=-1):
                                             password=f_pwd,
                                             comment_status=f_can_comment,
                                             content=f_content,
+                                            cover=f_cover,
                                             author=request.user.id)
                 pid = post.id
             else:
@@ -111,13 +123,21 @@ def edit_post(request, post_id=-1):
                                                             update_time=timezone.datetime.now(),
                                                             visit_status=f_visit,
                                                             password=f_pwd,
+                                                            cover=f_cover,
                                                             comment_status=f_can_comment,
                                                             content=f_content)
                 pid = post_id
             return HttpResponseRedirect(reverse('edit_post', kwargs={'post_id': pid}))
 
+    # get cover
+    if cover_id:
+        cover = PostCovers.objects.filter(id=cover_id).values()[0]
+        posts_view.check_cover(cover)
+    else:
+        cover = None
     content = {'common': Common.get_commons(request),
-               'form': form}
+               'form': form,
+               'cover': cover}
 
     return render(request, 'management/post_edit.html', content)
 
@@ -171,3 +191,39 @@ def destroy_post(request):
 
     Posts.objects.filter(id=post_id).delete()
     return JsonResponse(Common.get_response_content(), safe=False)
+
+
+@login_required
+def upload_post_cover(request):
+    if request.method != 'POST':
+        return JsonResponse(Common.get_response_content(False), safe=False)
+
+    img_file = request.FILES['f_img']
+    img_name = img_file._get_name()
+    tm = datetime.datetime.now()
+    tmf = tm.strftime('%Y%m%d%H%M%S%f')[:-3]
+    img_name = tmf + '_' + img_name
+    path = posts_view.get_post_cover_hard_path(tm.strftime('%Y'))
+    albums.handle_save_pic(path, img_name, img_file)
+    PostCovers.objects.create(name=img_name, alias=img_file._get_name(), creation_time=tm)
+
+    return JsonResponse(Common.get_response_content(), safe=False)
+
+
+@login_required
+def get_post_covers(request):
+    covers = PostCovers.objects.all().order_by('-creation_time').values()
+    ret = Common.get_response_content()
+    for c in covers:
+        posts_view.check_cover(c)
+    ret['covers'] = covers
+
+    common = Common.get_commons(request)
+    common['covers'] = covers
+    # return JsonResponse(ret, safe=False)
+    return render(request, 'management/post_edit_covers.html', common)
+
+
+@login_required
+def del_post_cover(request):
+    pass

@@ -5,6 +5,7 @@
             data-ckeditor-basepath="{% static 'ckeditor/ckeditor/' %}" id="ckeditor-init-script"></script>
     <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
     <link href="{% static 'management/post.css' %}" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'management/common.js' %}"></script>
 {% endblock %}
 
 {% block main_content %}
@@ -16,44 +17,60 @@
             {{ form.f_id }}
             {{ form.f_create_tm }}
             {{ form.f_update_tm }}
+            {{ form.f_cover }}
 
-            <div class="form-group row">
-                <div class="container-fluid">
-                    {{ form.f_title }}
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="container-fluid">
-                    {{ form.f_subtitle }}
-                </div>
-            </div>
-            <div class="container" id="post_metas">
+            <div id="post_metas">
                 <div class="row">
-                    <div class="form-group col-6 row">
-                        <label class="col-4">{{ form.f_publish_tm.label }}</label>
-                        <div class="col-8">
-                            {{ form.f_publish_tm }}
+                    <div class="col-8">
+                        <div class="form-group row">
+                            <div class="container-fluid">
+                                {{ form.f_title }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="container-fluid">
+                                {{ form.f_subtitle }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <label class="col-4">{{ form.f_publish_tm.label }}</label>
+                                    <div class="col-8">
+                                        {{ form.f_publish_tm }}
+                                    </div>
+                                </div>
+                                <div class="form-group  row">
+                                    <label class="col-4">{{ form.f_comment_status.label }}</label>
+                                    <div class="col-8 disabled readonly">
+                                        {{ form.f_comment_status }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group   row">
+                                    <label class="col-4">{{ form.f_visit_status.label }}</label>
+                                    <div class="col-8">
+                                        {{ form.f_visit_status }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-4">{{ form.f_pwd.label }}</label>
+                                    <div class="col-8">
+                                        {{ form.f_pwd }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-6 row">
-                        <label class="col-4">{{ form.f_comment_status.label }}</label>
-                        <div class="col-8 disabled readonly">
-                            {{ form.f_comment_status }}
-                        </div>
-                    </div>
-                </div>
+                    <div class="col-4">
+                        <div class="post_cover">
+                            {% if cover %}
+                                <img src="{% get_media_prefix %}{{ cover.thumb_s }}" id="post_cover_preview">
+                            {% else %}
+                                <img src="{% static '/img/album_img.jpg' %}" id="post_cover_preview">
+                            {% endif %}
 
-                <div class="row">
-                    <div class="form-group col-6 row">
-                        <label class="col-4">{{ form.f_visit_status.label }}</label>
-                        <div class="col-8">
-                            {{ form.f_visit_status }}
-                        </div>
-                    </div>
-                    <div class="form-group col-6 row">
-                        <label class="col-4">{{ form.f_pwd.label }}</label>
-                        <div class="col-8">
-                            {{ form.f_pwd }}
                         </div>
                     </div>
                 </div>
@@ -63,6 +80,7 @@
                 </div>
             </div>
 
+
             <div class="form-group">
                 <div>{{ form.f_content }}</div>
             </div>
@@ -71,6 +89,52 @@
                 <span class="col-4"><button type="submit" class="btn btn-sm btn-primary">Commit</button></span>
             </div>
         </form>
+    </div>
+    <div class="modal" id="cover_mgr">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Cover Manager</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body cover_mgr_body">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-up-img"
+                               role="tab" aria-controls="nav-home" aria-selected="true">Upload</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-img-uploaded"
+                               role="tab" aria-controls="nav-profile" aria-selected="false">Select</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-up-img" role="tabpanel"
+                             aria-labelledby="nav-home-tab">
+                            <div class="container">
+                                <form method="POST" action="#" id="fm_up_post_cover" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <input class="form-group form-control-file" type="file" accept="image/*"
+                                               id="select_post_cover" name="f_img">
+                                    </div>
+                                </form>
+
+                                <div class="row">
+                                    <button class="btn btn-sm btn-primary" id="submit_post_cover">Upload</button>
+                                </div>
+                            </div>
+                            <img id="post_cover_up_img" class="post_cover_up_preview">
+                        </div>
+                        <div class="tab-pane fade" id="nav-img-uploaded" role="tabpanel"
+                             aria-labelledby="nav-profile-tab">
+                            ...
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -87,8 +151,76 @@
         };
 
         $(window).ready(function () {
+            $.ajaxSetup({
+                headers: {"X-CSRFToken": getCookie("csrftoken")}
+            });
+
             $('.link_post').addClass('text-primary');
             post_visit_changed($('#{{ form.f_visit_status.auto_id }}')[0]);
+
+            $('.post_cover').click(function () {
+                $('#cover_mgr').modal()
+            });
+
+            $('#nav-up-img').click(function () {
+
+            });
+
+            $('#select_post_cover').change(function (e) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('post_cover_up_img').src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+
+            reload_covers();
+
+            $('#submit_post_cover').click(function (e) {
+                let url = "{% url 'upload_post_cover' %}";
+                let data = new FormData($('#fm_up_post_cover')[0]); //$('#fm_up_post_cover').serialize();
+                console.log(data);
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: data, processData: false,
+                    contentType: false,
+                    success: function (msg, status) {
+                        reload_covers();
+                    },
+                    error: function (msg) {
+                    }
+                });
+            });
+
+            function reload_covers() {
+                let url = "{% url 'get_post_covers' %}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    async: true,
+                    success: function (msg, status) {
+                        $('#nav-img-uploaded').html(msg);
+                        $('#nav-profile-tab').tab('show');
+                        $('.post_covers_box').click(function (e) {
+                            $('.post_covers_box').removeClass('post_cover_selected');
+                            $(this).addClass('post_cover_selected');
+                            let img = $(this).children('img').first();
+                            $('#cover_img_selected_preview').attr('src', img.attr('src'));
+                            $('#cover_img_selected_preview').attr('cover_id', img.attr('cover_id'));
+                        });
+
+                        $('#embed_post_cover').click(function (e) {
+                            let preview = $('#cover_img_selected_preview');
+                            $('#post_cover_preview').attr('src', preview.attr('src'));
+                            $('#{{ form.f_cover.auto_id }}').attr('value', preview.attr('cover_id'));
+                            $('#cover_mgr').modal('hide')
+                        })
+                    },
+                    error: function (msg) {
+                    }
+                })
+            };
         })
 
     </script>
