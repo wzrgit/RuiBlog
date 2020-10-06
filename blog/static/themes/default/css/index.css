@@ -10,6 +10,10 @@ body {
     height: 100%;
 }
 
+.back_cover a{
+    text-decoration: none;
+}
+
 .float_cover {
     background-color: rgba(0, 0, 0, 0.38);
     margin-bottom: 0;
