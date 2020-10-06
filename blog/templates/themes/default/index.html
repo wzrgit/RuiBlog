@@ -3,21 +3,36 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <script>{% static 'libs/bootstrap/js/bootstrap.min.js' %}</script>
+    <script type="text/javascript" src="{% static 'libs/jquery-3.5.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'libs/bootstrap/js/bootstrap.min.js' %}"></script>
     <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'themes/default/css/index.css' %}" rel="stylesheet">
     <title>{{ blogname }}</title>
 </head>
 <body>
-<h1>{{ blog_name }}</h1><br>
-<h2>{{ blog_desc }}</h2>
-<hr>
-<button type="button" class="btn btn-info">Use Django3</button>
-<button type="button" class="btn btn-success">Bootstrap4 imported</button>
-{% if common.is_login %}
-    <a href="/management/dashboard" target="_blank">管理</a>
-{% else %}
-    <a href="/admin" target="_blank">登录</a>
-{% endif %}
+<div class="back_cover w-100">
+    <div class="float_cover w-100">
+        <a href="{% url 'albums_list' %}">
+            <div id="visit_content">
+                于浩繁网络中之僻静一隅<br>
+                记录只言片语<br>
+                或因所闻所见,或因所思所想<br>
+                亦如踏雪飞鸿,亦如挂角羚羊<br>
+            </div>
+        </a>
+    </div>
+
+    <footer class="footer bg-light">
+        <div class="container">
+            <div class="text-center" id="copy_right">copyright &copy; ruiblog@2020
+                {% if not user.is_authenticated %} <span><a href="{% url 'admin:login' %}">Admin</a></span>
+                {% else %} <span><a href="{% url 'dashboard' %}" target="_blank">manage</a></span>
+                {% endif %}
+            </div>
+        </div>
+    </footer>
+</div>
+
 
 </body>
 </html>

@@ -1,0 +1,29 @@
+body {
+    height: 100vh;
+}
+
+.back_cover {
+    background-image: url("../img/bg1.jpg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    height: 100%;
+}
+
+.float_cover {
+    background-color: rgba(0, 0, 0, 0.38);
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+#visit_content {
+    text-align: center;
+    color: aliceblue;
+    padding-top: 255px;
+}

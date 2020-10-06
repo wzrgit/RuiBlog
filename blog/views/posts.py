@@ -4,6 +4,7 @@ from django.urls import reverse
 from blog.models import Posts, PostCategory, CategoryHasPosts, VisitStatus, TrashStatus, PostCovers
 import RuiBlog.settings as blog_settings
 from .common import Common
+import re
 
 
 def get_post_cover_hard_path(year):
@@ -53,6 +54,18 @@ def post_list(request, curr_page=0, category=-1):
         else:
             if p['visit_status'] != VisitStatus.Public:
                 p['content'] = ''
+
+        ctt = p['content']
+        ctt = re.sub('</p>', '&nbsp;&nbsp;&nbsp;', ctt)
+        # ctt = re.sub(r'<(\/)?([A-z0-9 ][^\>]*)*>(.*?)', ' ', ctt)
+        ctt = re.sub('<[^>]*>', '', ctt)
+        if len(ctt) > 600:
+            max_len = 600
+            idx = ctt.find('&nbsp;', max_len - 6, max_len)
+            if idx > 0:
+                max_len = idx
+            ctt = ctt[:max_len]
+        p['content'] = ctt
 
     categories = PostCategory.objects.all().values()
 

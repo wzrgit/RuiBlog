@@ -22,9 +22,9 @@ def posts(request):
         categories = CategoryHasPosts.objects.filter(post_id=p['id'])
         p['categories'] = categories.values()
         if len(p['cover']) > 0:
-            cover = PostCovers.objects.filter(id=int(cover)).values[0]
-            posts_view.check_cover(cover)
-            p['cover'] = cover
+            cover_img = PostCovers.objects.filter(id=int(p['cover'])).values()[0]
+            posts_view.check_cover(cover_img)
+            p['cover_img'] = cover_img
 
     normal_posts = Posts.objects.filter(trash_status=TrashStatus.Normal)
     trashed_posts = Posts.objects.filter(trash_status=TrashStatus.Trashed)
