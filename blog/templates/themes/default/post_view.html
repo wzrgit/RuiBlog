@@ -12,9 +12,9 @@
         <div class="content_main">
             <h4 class="post_title text-center">{{ post.title }}</h4>
             {% if post.subtitle %}
-            <h6 class="post_sub_title text-center">{{ post.subtitle }}</h6>
+                <h6 class="post_sub_title text-center">{{ post.subtitle }}</h6>
             {% endif %}
-        <div class="text-center">{{ post.public_time |date:'Y/m/d H:s' }}</div>
+            <div class="text-center">{{ post.public_time |date:'Y/m/d H:s' }}</div>
             <hr>
             <div>
                 {{ post.content | safe }}
